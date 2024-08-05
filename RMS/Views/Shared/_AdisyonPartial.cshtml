@@ -1,0 +1,140 @@
+﻿@using RMS.Models
+@model List<Siparisler>
+@{
+    int i = 1;
+    int a = 1;
+    decimal toplam = 0;
+}
+
+@{
+    Dictionary<string, List<Siparisler>> groupedOrders = new Dictionary<string, List<Siparisler>>();
+
+    foreach (var item in Model)
+    {
+        string key = $"{item.YemekAd} {item.YemekOzellikJson}";
+        if (!groupedOrders.ContainsKey(key))
+        {
+            groupedOrders.Add(key, new List<Siparisler> { item });
+        }
+        else
+        {
+            groupedOrders[key].Add(item);
+        }
+    }
+}
+
+<style>
+    .btn:focus {
+        outline: none;
+        box-shadow: none;
+    }
+</style>
+<div class="accordion" id="accordionExample">
+    @foreach (var group in groupedOrders)
+    {
+        var yemekAd = group.Value.First().YemekAd;
+        var yemekId = group.Value.First().YemekId;
+        var masaId = group.Value.First().MasaId;
+
+
+        var yemekOzellikJson = group.Value.First().YemekOzellikJson;
+        var adet = group.Value.Sum(x => x.Adet);
+        var fiyat = group.Value.First().YemekFiyat * adet;
+
+       
+
+
+
+        <div class="card">
+            <div class="card-header d-flex align-items-center" id="heading-@(i-1)">
+
+                <div class="col-1 icon-place">
+                    @{
+                        if (!yemekOzellikJson.IsEmpty())
+                        {
+                            <i class="fa-solid fa-chevron-down btn-collapse" data-toggle="collapse" data-target="#collapse-@(i-1)"></i>
+                        }
+                    }
+                </div>
+                <div class="col-11 p-0 d-flex justify-content-center float-right ">
+                    <h2 class="mb-0 col">
+
+                        <button class="btn  btn-block text-left btn-collapse" type="button" data-toggle="collapse" data-target="#collapse-@(i-1)" aria-expanded="true" aria-controls="collapse-@(i-1)" @(yemekOzellikJson.IsEmpty() ? "disabled style=opacity:1;" : "" )>
+
+                            @yemekAd
+                        </button>
+
+
+                    </h2>
+                    <div class="input-group number-spinner justify-content-end align-items-center w-100 col" style="width:fit-content;">
+                        <span class="badge badge-pill badge-warning" style="height:fit-content;">  @fiyat &#8378;</span>
+
+                        <span class="input-group-btn ">
+                            <button class="btn btn-default btn-sm btn-dwn" onclick="down(@(i-1));" data-dir="dwn"><i class="fas fa-minus"></i></button>
+                        </span>
+
+                        <input type="text" class="form-control p-0  text-center adisyon-adet-@(i-1) aa" yemekid="@yemekId" id="adisyon-adet-@(i-1)" min="0" value="@adet" sayi="@adet" style="height: 30px; max-width: 30px; min-width: 30px ">
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm btn-up" onclick="up(@(i-1));" data-dir="up"><i class="fas fa-plus "></i></button>
+                        </span>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div id="collapse-@(i-1)" class="collapse " aria-labelledby="heading-@(i-1)" data-parent="#accordionExample">
+                <div class="card-body">
+                    @*@if (!string.IsNullOrEmpty(yemekOzellikJson))
+                        {
+                            <text>- @yemekOzellikJson </text>
+
+
+                        } x @adet ---- @fiyat &#8378;*@
+
+                    @{
+
+                        Newtonsoft.Json.Linq.JObject secimler = null;
+                        try
+                        {
+                            secimler = Newtonsoft.Json.Linq.JObject.Parse(yemekOzellikJson);
+                        }
+                        catch (Exception ex)
+                        {
+                           
+                        }
+                        if (secimler != null)
+                        {
+                            <div>
+                                @foreach (var secenek in secimler)
+                                {
+                                    @*<h3>@secenek.Key:</h3>*@
+
+                                    foreach (var secim in secenek.Value)
+                                    {
+
+                                        <span class="badge badge-pill badge-success  " style="font-size:13px;">@secim.ToString()</span>
+                                    }
+
+                                }
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+
+        i++;
+        toplam += fiyat.Value;
+    }
+</div>
+
+<span id="fiyatToplam" toplam="@toplam"></span>
+<span id="toplam" adet="@(i-1)"></span>
+
+
+

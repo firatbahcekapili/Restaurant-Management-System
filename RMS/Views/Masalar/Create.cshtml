@@ -1,0 +1,113 @@
+﻿@model RMS.Models.Masalar
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+@{
+
+    ViewBag.Title = "Create";
+
+
+
+}
+
+
+
+<div class="container d-flex align-items-center justify-content-center " style="height:100vh;">
+
+
+        <div class="row card border-0 p-4 border shadow " style="background-color: white; width: 350px; ">
+
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+          
+
+                <h4 class="card-title text-center">Masalar</h4>
+                <hr />
+                <div class="form-horizontal card-body d-block justify-content-center">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MasaAd, htmlAttributes: new { @class = "control-label col" })
+                        <div class="col">
+                            @Html.EditorFor(model => model.MasaAd, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MasaAd, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Kapasite, htmlAttributes: new { @class = "control-label col" })
+                        <div class="col">
+                            @Html.EditorFor(model => model.Kapasite, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Kapasite, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Konum, htmlAttributes: new { @class = "control-label col" })
+                        <div class="col">
+
+                            @Html.ValidationMessageFor(model => model.Konum, "", new { @class = "text-danger" })
+
+
+                            @Html.DropDownListFor(model => model.Konum, Model.Konumlar, htmlAttributes: new { @class = "form-control form-select dropKonum", id = "Konum" })
+
+                            <div class="mt-3 mb-1" id="newKonumInput" style="display: none;">
+                                <input type="text" id="nkonum" name="nKonum" class="form-control" placeholder="Yeni Konum Adı" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Durum, htmlAttributes: new { @class = "control-label col" })
+                        <div class="col">
+
+                            @Html.DropDownListFor(model => model.Durum, new SelectList(Enum.GetValues(typeof(RMS.Models.durum))), new { @class = "form-control form-select" })
+                            @Html.ValidationMessageFor(model => model.Durum, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+                }
+
+
+
+            </div>
+
+
+
+    </div>
+
+
+<script src="~/Scripts/jquery-3.6.4.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".dropKonum").change(function () {
+            if ($(this).val() == "Yeni Konum Ekle") {
+                $("#newKonumInput").slideDown("fast");
+                var dropdown = document.getElementById("Konum");
+                dropdown.setAttribute("name", "K");
+                var newkonum = document.getElementById("nkonum");
+                newkonum.setAttribute("name", "Konum");
+
+            } else {
+                $("#newKonumInput").slideUp("fast");
+                var newkonum = document.getElementById("nkonum");
+                newkonum.setAttribute("name", "nkonum");
+                var dropdown = document.getElementById("Konum");
+                dropdown.setAttribute("name", "Konum");
+
+            }
+        });
+    });
+</script>

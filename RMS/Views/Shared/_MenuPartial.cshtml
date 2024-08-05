@@ -1,0 +1,964 @@
+﻿@model RMS.Models.KatalogViewModel
+
+
+@*<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" rel="stylesheet" />*@
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous">
+
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/transition.min.css" integrity="sha512-HgM+2tpAdAIDm77Pe0gKU78lxA5MPfurAZFf1KDm1l/0npc9YRh+7rqDXmBKajNu3oFtiOKX+fBrK0W/8wRecw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/dropdown.min.css" integrity="sha512-tdyzfjYDk2OR9L10jvzzuGUB0Rvl5fyMW/Z8yfbYyyENfuXxtcDtEq7d/PdiA0hzQzXjWwvZasjEp8Joli2tkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/dropdown.min.js" integrity="sha512-PD2QRjH0s7TFz8Oicpi4UFJBdKP0vFeYpmNPsEoNDHfG3QcGLTs8XUrkXWEQXX2Q0g+1oEwvow27TM2VfPdTxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+
+<style>
+
+    .img-box-new {
+        width: 120px;
+        height: 80px;
+        border-radius: 20px;
+        font-size: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .img-box-new img {
+            object-fit: contain;
+            height: 80px;
+            width: 100%;
+        }
+
+        .img-box-new div {
+            display: flex;
+            align-items: center;
+        }
+
+        .img-box-new #duzenleYemekResim {
+            border-radius: 20px;
+        }
+
+    .img-box {
+        width: 120px;
+        height: 80px;
+        border-radius: 20px;
+        font-size: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .img-box img {
+            object-fit: contain;
+            height: 80px;
+            width: 100%;
+        }
+
+        .img-box div {
+            display: flex;
+            align-items: center;
+        }
+
+        .img-box #duzenleYemekResim {
+            border-radius: 20px;
+        }
+
+    .custom-file-label {
+        background-color: transparent; /* Arka planı saydam yap */
+        background-size: cover; /* Resmi kaplamak için */
+    }
+</style>
+
+
+<div class="col-xl-12  mb-3 row">
+
+    <div class="col-xl-3 col-10">
+        <select class="form-control form-select ui search dropdown" id="yemekSelect">
+
+            <option value="Yemek Seçin">Yemek Seçin</option>
+            <option>Yemek Ekle / Düzenle</option>
+
+            @foreach (var item in Model.Menuler)
+            {
+
+                <option value="@item.YemekId" data-value="@item.YemekId">@item.YemekAd</option>
+
+            }
+
+
+        </select>
+
+
+    </div>
+    <div class="col-xl-7 col-1"><button class="btn btn-outline-primary " data-bs-toggle="modal" data-bs-target="#kt_modal_stacked_1"><i class="fa-regular fa-pen-to-square"></i></button></div>
+
+
+
+
+</div>
+
+
+
+
+<div class="col">
+
+    <div class="row">
+
+
+
+        <div class="col-xl-3 col-md-5">
+
+            <div class="col-md-12 d-flex align-items-center" style="height:50px;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+            <div class="list-group card border-left-danger  col-md-11" style="height:50px" id="trash">
+
+            </div>
+        </div>
+
+
+
+        <div class="col-xl-5 col-md-7  " style="height:fit-content;">
+            <div class="col-md-12 d-flex align-items-center" style="height:50px;">Eklemek için buraya sürükleyin</div>
+            <div class="col-md-12 list-group card border-left-success" style="padding-right:initial">
+
+                <ul class="list-group" style="min-height:50px" id="demo1">
+
+                    @foreach (var item in Model.Katalog_Ozellikler)
+                    {
+                        <li class="list-group-item " data-item-id="@item.KatalogId">@Model.YemekKataloglar.FirstOrDefault(x => x.KatalogId == item.KatalogId).KatalogAd</li>
+                    }
+
+
+
+                </ul>
+            </div>
+
+
+        </div>
+        <div class="col-xl-4 col-md-12">
+            <div class="row col-md-12 align-items-center m-0 " style="height:50px;">
+                <div class="col-10"><span>Tüm Kataloglar   </span></div>
+                <div class="col-1 float-right"><button class="btn btn-outline-primary " data-bs-toggle="modal" data-bs-target="#kt_modal_stacked_3"><i class="fa-regular fa-pen-to-square"></i></button></div>
+
+            </div>
+
+
+            <ul class="list-group overflow-auto  " id="demo2" style="max-height:500px;">
+                @foreach (var item in Model.YemekKataloglar)
+                {
+                    <li class="list-group-item" data-item-id="@item.KatalogId">
+                        <div class="col">
+                            @item.KatalogAd
+                        </div>
+
+                        <div class="col  d-flex align-items-center   ">
+                            <div class="custom-control custom-switch" style="width:fit-content;">
+                                <input type="checkbox" class="custom-control-input" id="Switch-@item.KatalogId" @(item.CokluSecim == true ? "checked" : "") onchange="switchChanged(this,@item.KatalogId)">
+                                <label class="custom-control-label" for="Switch-@item.KatalogId">Çoklu seçim</label>
+                            </div>
+
+                            @*<div class="d-flex col justify-content-end">
+
+                                    <a onclick="KatalogEditStart(@item.KatalogId)" class="btn btn-outline-warning ">Düzenle</a>
+                                </div>*@
+                        </div>
+
+
+                        <span></span>
+                    </li>
+                }
+
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Yemek düzenleme modal -->
+
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_1">
+    <div class="modal-dialog  modal-dialog-centered" id="kt_modal_stacked_1_child" style="max-width:400px">
+        <div class="modal-content overflow-auto" style="height:500px;">
+            <div class="modal-header">
+                <div class="col-12"> <h2 class="modal-title text-center">Yemek</h2></div>
+
+
+            </div>
+            <button onclick="Close()" type="button" class="x" aria-hidden="true">❌</button>
+            <div class="modal-body">
+
+
+
+
+
+                @{
+                    <div class="form-horizontal ">
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group row justify-content-center">
+
+                            <div class="col-md-9 col-9">
+
+
+
+
+
+
+                                @Html.ValidationMessageFor(model => model.Menuler[0].YemekAd, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-center">
+                                <button class="btn btn-success  w-75" onclick="YemekEkle()">Oluştur</button>
+
+                            </div>
+
+                        </div>
+                        <div id="YemeklerParent">
+                            <div class="row " id="yemekler" style="height:100px;">
+                                <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" style="max-height:200px;">
+
+                                    <div class="alert alert-secondary" role="alert">
+                                        Yemek kaldırmak için kategorinin üstündeki çöp simgesine, ismini düzeltmek için düzeltme simgesine tıklayabilirsiniz.
+                                    </div>
+
+                                    @foreach (var item in Model.Menuler)
+                                    {
+                                        @*<div class="btn  btn-danger  small  text-responsive m-1 d-flex justify-content-center trigger-btn  pt-2 pb-2" data-toggle="modal"
+                                            onclick="document.getElementById('myModal').showModal();" value="@item.KatalogId">@item.KatalogAd</div>*@
+
+
+
+
+
+                                        <div class="col-6 d-flex align-items-center bg-gray-200 rounded-pill mb-2 " style="max-height:48px">
+                                            <div class="col-4 d-flex align-items-center ">@item.YemekAd</div>
+                                            <div class="col-4 d-flex align-items-center justify-content-end pr-0">
+                                                @*<a href="#toggle-form-@item.YemekId" data-toggle="collapse"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>*@
+                                                <a class="" data-toggle="modal" onclick="ModalYemekDuzenle('@item.YemekKategori',@item.YemekId, '@item.YemekAd',@item.YemekFiyat.ToString().Replace(",","."),'@item.YemekResim')"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+
+
+                                            </div>
+                                            <div class="col-4 d-flex align-items-center justify-content-center">
+                                                <a class="btn" style="color: #e74a3b;"
+                                                   data-toggle="modal" onclick="Modal2(@item.YemekId,'@item.YemekAd')" value="@item.YemekId">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+
+
+                                        </div>
+
+                                        @*<div id="toggle-form-@item.YemekId" class="collapse" aria-expanded="false">
+                                                <label class="zip-label">Yeni Ad</label>
+                                                <input type="text" tabindex="1" id="input-yemekad-@item.YemekId" required>
+                                                <button class="submit-btn" onclick="YyeniAd(@item.YemekId)" type="submit">Onayla</button>
+                                            </div>*@
+
+
+
+
+
+
+                                    }
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+                }
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Yemek düzenleme modal son -->
+<!--Yemek düzenle modal-->
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_1_1">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ; width:auto;">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-12 d-flex justify-content-center ">
+                    <div class="img-box row shadow" style="position:relative">
+
+
+
+
+
+                    </div>
+                </div>
+
+
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <h4 class="modal-title"></h4>
+
+            @using (Ajax.BeginForm("YemekDuzenle", "Menu", new AjaxOptions { HttpMethod = "POST", OnSuccess = "MenuDuzenleSucces" }, new { @class = "ajax-form w-100", id = "MenuDuzenleForm" }))
+            {
+
+                RMS.Models.Menu m = new RMS.Models.Menu();
+
+                <div class="modal-body d-flex justify-content-center ">
+
+
+
+
+
+                    <div class=" " style="max-width:300px">
+                        <div class="form-group">
+                            @* <input id="food-name" class="form-control text-box single-line" type="text" name="name" value="" required />*@
+                            @Html.EditorFor(model => m.YemekAd, "YemekAd", new { htmlAttributes = new { name = "YemekAd", @class = "form-control", placeholder = "Yemek Adı", required = "required", id = "food-name" } })
+                            @Html.ValidationMessageFor(model => m.YemekAd, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group justify-content-center">
+
+                                @* <input id="food-price" class="form-control m-0" type="number" name="name" value="" required />*@
+                                @Html.EditorFor(model => m.YemekFiyat, "YemekFiyat", new { htmlAttributes = new { name = "YemekFiyat", @class = "form-control", placeholder = "Yemek Fiyatı", required = "required", id = "food-price" } })
+
+
+
+                                <div class="input-group-append">
+                                    <div class="input-group-text">₺</div>
+                                </div>
+
+                            </div>
+                            @Html.ValidationMessageFor(model => m.YemekFiyat, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            @*<select class="form-control form-select " id="modal-yemek-kategori">
+                                    @foreach (var item in Model.Menuler)
+                                    {
+                                        <option>@item.</option>
+                                    }
+
+                                </select>*@
+
+                            <select class="form-control form-select dropKategori " id="Kategori" name="YemekKategori">
+                                @foreach (var kategori in Model.Kategoriler)
+                                {
+                                    <option value="@kategori.Value">@kategori.Text</option>
+                                }
+                            </select>
+
+
+                            <div class="mt-3 mb-1" id="newKategoriInput" style="display: none;">
+                                <input type="text" id="nkategori" name="nKategori" class="form-control" placeholder="Yeni Kategori Adı" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="foodimg" accept=".jpg,.jpeg,.png" aria-describedby="foodimg" onchange="dosyaOnizleme(this);">
+                                    <label class="custom-file-label" style="text-align:start;" for="inputGroupFile05" data-browse="Yükle">Resim Seç</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer justify-content-center" id="modal-sadas">
+                    <a href="#" class="btn btn-info" data-bs-dismiss="modal">İptal et</a>
+                    @*<a id="modal-yemek-duzenle-onay" class="btn btn-success">Onayla</a>*@
+                    <button type="submit" class="btn btn-success ">Onayla</button>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+<!--Yemek düzenle modal son-->
+<!--Yeni Yemek Ekle-->
+
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_1_01">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ; width:auto;">
+
+        @using (Ajax.BeginForm("YemekCreate", "Menu", new AjaxOptions { HttpMethod = "POST", OnSuccess = "MenuEkleSucces" }, new { @class = "ajax-form w-100", id = "YemekEkleForm" }))
+        {
+            RMS.Models.Menu m = new RMS.Models.Menu();
+            <div class="modal-content">
+                <div class="modal-header row">
+                    <div class="col-12 d-flex justify-content-center ">
+                        <div class="img-box-new row shadow" style="position:relative">
+
+
+                            <div><i class="col p-0 fa-solid fa-utensils"></i></div>
+
+
+                        </div>
+                    </div>
+
+
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <h4 class="modal-title"></h4>
+
+
+                <div class="modal-body d-flex justify-content-center ">
+
+
+
+                    <div class="form-horizontal " id="new-food-form" style="max-width:300px">
+
+                        <div class="form-group">
+                            @* <input id="new-food-name" placeholder="Yemek Adı" class="form-control text-box single-line" type="text" name="name" value="" required />*@
+
+                            @Html.EditorFor(model => m.YemekAd, "YemekAd", new { htmlAttributes = new { name = "YemekAd", @class = "form-control", placeholder = "Yemek Adı", required = "required", id = "new-food-name" } })
+                            @Html.ValidationMessageFor(model => m.YemekAd, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group justify-content-center">
+
+                                @*<input id="new-food-price" placeholder="Fiyat" class="form-control m-0" type="number" name="name" value="" required />*@
+                                @Html.EditorFor(model => m.YemekFiyat, "YemekFiyat", new { htmlAttributes = new { name = "YemekFiyat", @class = "form-control", placeholder = "Yemek Fiyatı", required = "required", id = "new-food-price" } })
+
+
+                                <div class="input-group-append">
+                                    <div class="input-group-text">₺</div>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => m.YemekFiyat, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            @*<select class="form-control form-select " id="modal-yemek-kategori">
+                                    @foreach (var item in Model.Menuler)
+                                    {
+                                        <option>@item.</option>
+                                    }
+
+                                </select>*@
+
+                            <select class="form-control form-select nfdropKategori" id="fKategori" name="YemekKategori">
+                                @foreach (var kategori in Model.Kategoriler)
+                                {
+                                    <option value="@kategori.Value">@kategori.Text</option>
+                                }
+                            </select>
+
+
+                            <div class="mt-3 mb-1 " id="newFoodKategoriInput" style="display: none;">
+                                @* <input type="text" id="nfkategori" name="nKategori" class="form-control" placeholder="Yeni Kategori Adı" />*@
+
+                                @Html.EditorFor(model => m.YemekKategori, "YemekKategori", new { htmlAttributes = new { name = "nKategori", @class = "form-control", placeholder = "Yeni Kategori Adı", required = "required", id = "nfkategori" } })
+                                @Html.ValidationMessageFor(model => m.YemekKategori, "", new { @class = "text-danger" })
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="custom-file-new">
+                                    <input type="file" class="custom-file-input" id="foodimgnew" accept=".jpg,.jpeg,.png" aria-describedby="foodimg" onchange="dosyaOnizlemeNew(this);">
+                                    <label class="custom-file-label" style="text-align:start;" for="inputGroupFile04" data-browse="Yükle">Resim Seç</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer justify-content-center" id="modal-sadas">
+                    <a href="#" class="btn btn-info" data-bs-dismiss="modal">İptal et</a>
+                    @*<a id="modal-yemek-ekle-onay" class="btn btn-success">Onayla</a>*@
+                    <button type="submit" class="btn btn-success">Onayla</button>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+<!--Yeni Yemek Ekle modal son-->
+<!-- Yemek Emin misiniz? modal  -->
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_2">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ;">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-12">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                </div>
+
+
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <h4 class="modal-title">Emin misiniz?</h4>
+            <div class="modal-body">
+                <p><b id="modal-yemek-ad"></b> adlı yemeği silmek istediğinize emin misiniz? Evet demeniz takdirinde yemeğe bir daha erişemezsiniz!</p>
+            </div>
+            <div class="modal-footer justify-content-center" id="modal-footer">
+                <a href="#" class="btn btn-info" data-bs-dismiss="modal">İptal et</a>
+                <a id="modal-sil" class="btn btn-danger">Evet sil!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Yemek Emin misiniz? modal son -->
+<!-- Özellik düzenleme modal -->
+
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_3">
+    <div class="modal-dialog  modal-dialog-centered" style="max-width:400px">
+        <div class="modal-content overflow-auto" style="height:500px;">
+            <div class="modal-header">
+                <div class="col-12"> <h2 class="modal-title text-center">Yemek Katalog</h2></div>
+
+
+            </div>
+            <button type="button" class="x" data-bs-dismiss="modal" aria-hidden="true">❌</button>
+            <div class="modal-body">
+
+
+
+
+                @{
+                    <div class="form-horizontal ">
+
+
+
+
+                        @using (Ajax.BeginForm("KatalogCreate", "YemekKatalog", new AjaxOptions { HttpMethod = "POST", OnSuccess = "YeniKatalogSucces" }, new { @class = "ajax-form w-100", id = "KatalogEkleForm" }))
+                        {
+                            RMS.Models.YemekKatalog k = new RMS.Models.YemekKatalog();
+                            <div class="form-group row justify-content-center">
+
+                                <div class="col-md-9 col-9">
+
+                                    @*  <input class="form-control text-box single-line" id="KatalogAd" name="KatalogAd" type="text" required>*@
+
+
+                                    @Html.EditorFor(model => k.KatalogAd, "KatalogAd", new { htmlAttributes = new { name = "KatalogAd", @class = "form-control", placeholder = "Katalog Adı", required = "required", id = "KatalogAd" } })
+
+
+                                    @Html.ValidationMessageFor(model => k.KatalogAd, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-3 col-3">
+                                    @*<div class="btn btn-success " onclick="Ekle()">Oluştur</div>*@
+                                    <button class="btn btn-success" type="submit">Oluştur</button>
+                                </div>
+                            </div>
+                        }
+                        <div id="kataloglarParent">
+                            <div class="row " id="kataloglar" style="height:100px;">
+                                <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" style="max-height:200px;">
+
+                                    <div class="alert alert-secondary" role="alert">
+                                        Katalog kaldırmak için katalğun üstündeki çöp simgesine, ismini düzeltmek için düzeltme simgesine tıklayabilirsiniz.
+                                    </div>
+
+                                    @foreach (var item in Model.YemekKataloglar)
+                                    {
+                                        @*<div class="btn  btn-danger  small  text-responsive m-1 d-flex justify-content-center trigger-btn  pt-2 pb-2" data-toggle="modal"
+                                            onclick="document.getElementById('myModal').showModal();" value="@item.KatalogId">@item.KatalogAd</div>*@
+
+
+
+
+
+
+                                        <div class="col-6 p-0">
+
+
+
+                                            <div class="col-12 p-0 d-flex align-items-center  bg-gray-200 rounded-pill mb-2  " style="height:48px">
+                                                <div class="col-6 m-0 pl-4 d-flex align-items-center  ">@item.KatalogAd</div>
+                                                <div class="col-3 m-0 d-flex align-items-center justify-content-end pr-0">
+                                                    <a href="#toggle-form-@item.KatalogId" class="p-0" data-toggle="collapse"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+
+                                                </div>
+                                                <div class="col-3 m-0 d-flex align-items-center justify-content-center">
+                                                    <a class="btn p-0" style="color: #e74a3b;"
+                                                       data-toggle="modal" onclick="Modal2Yemek(@item.KatalogId,'@item.KatalogAd')" value="@item.KatalogId">
+                                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+
+
+                                            </div>
+
+                                            <div id="toggle-form-@item.KatalogId" class="collapse col-12" aria-expanded="false">
+                                                <label class="zip-label  ">Yeni Ad</label>
+                                                <input type="text" tabindex="1" id="input-katalogad-@item.KatalogId" required>
+                                                <button class="submit-btn" onclick="KyeniAd(@item.KatalogId)" type="submit">Onayla</button>
+                                            </div>
+
+                                        </div>
+
+
+
+                                    }
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+                }
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- Özellik düzenleme modal son -->
+<!-- Özellik Emin misiniz? modal  -->
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_4">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ;">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-12">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                </div>
+
+
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <h4 class="modal-title">Emin misiniz?</h4>
+            <div class="modal-body">
+                <p><b id="modal-katalog-ad"></b> adlı kataloğu silmek istediğinize emin misiniz? Evet demeniz takdirinde kataloğa bir daha erişemezsiniz!</p>
+            </div>
+            <div class="modal-footer justify-content-center" id="modal-footer">
+                <a href="#" class="btn btn-info" data-bs-dismiss="modal">İptal et</a>
+                <a id="modal-sil-katalog" class="btn btn-danger">Evet sil!</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Özellik Emin misiniz? modal son -->
+@{
+
+    var data = ViewBag.Durum;
+
+
+
+}
+<div id="viewbag">@data</div>
+
+
+<script>
+
+
+    var elements = Array.prototype.slice.call(document.querySelectorAll("[data-bs-stacked-modal]"));
+
+    if (elements && elements.length > 0) {
+        elements.forEach((element) => {
+            if (element.getAttribute("data-kt-initialized") === "1") {
+                return;
+            }
+
+            element.setAttribute("data-kt-initialized", "1");
+
+            element.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const modalEl = document.querySelector(this.getAttribute("data-bs-stacked-modal"));
+
+                if (modalEl) {
+                    const modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                }
+            });
+        });
+    }
+
+
+    function Modal2(KatalogId, KatalogAd) {
+        $("#modal-sil")
+            .html("Evet sil!")
+            .attr("onclick", "Sil(" + KatalogId + ")");
+        $("#modal-yemek-ad").text(KatalogAd);
+        $('#kt_modal_stacked_2').modal('show');
+    }
+
+
+    function Modal2Yemek(KatalogId, KatalogAd) {
+        $("#modal-sil-katalog")
+            .html("Evet sil!")
+            .attr("onclick", "SilKatalog(" + KatalogId + ")");
+        $("#modal-katalog-ad").text(KatalogAd);
+        $('#kt_modal_stacked_4').modal('show');
+    }
+
+
+    function ModalYemekDuzenle(YemekKategori, YemekId, YemekAd, YemekFiyat, YemekResim) {
+
+
+        $('#kt_modal_stacked_1_1 .modal-title').text(YemekAd);
+        $('#kt_modal_stacked_1_1 #food-name').val(YemekAd);
+        $('#kt_modal_stacked_1_1 #food-price').val(YemekFiyat);
+        $('#kt_modal_stacked_1_1 #Kategori').val(YemekKategori).trigger('change');
+
+        $('#nkategori').val('');
+        $('#kt_modal_stacked_1_1 #modal-yemek-duzenle-onay').attr('YemekId', YemekId);
+        $('#kt_modal_stacked_1_1 #MenuDuzenleForm').attr('YemekId', YemekId);
+
+        var fileinput = '<input type="file" class="custom-file-input" id="foodimg" accept=".jpg,.jpeg,.png" aria-describedby="foodimg" onchange="dosyaOnizleme(this);"><label class= "custom-file-label" style = "text-align:start;" for= "inputGroupFile04" data-browse= "Yükle" >Resim Seç</label > ';
+        $('.custom-file').html(fileinput);
+        $('.img-box').css({ 'width': '120px' });
+
+        $('.img-box').removeClass('p-2');
+
+        if (YemekResim !== "" && YemekResim !== null) {
+            $('#kt_modal_stacked_1_1 .img-box').html('<div  style="position="relative"><i class="fa-solid fa-trash " onclick="ResimKaldır(' + YemekId + ')" style="position:absolute;font-size: 18px;width: 105%;height: 105%;justify-content: right;display: flex;color: #d51313;z-index: 1;" aria-hidden="true"></i><img  class=" p-0" id="duzenleYemekResim" style="height:80px;" src="' + YemekResim + '"  alt="Yemek Resim" /> </div>  ');
+        } else {
+            $('#kt_modal_stacked_1_1 .img-box').html('<div ><i class="col p-0 fa-solid fa-utensils"></i></div>');
+        }
+
+
+
+        $('#kt_modal_stacked_1_1').modal('show');
+    }
+
+
+    function Close() {
+
+        $('#kt_modal_stacked_1').modal('hide');
+        document.getElementById("katalogSelect").selectedIndex = 0;
+    }
+
+
+
+
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".nfdropKategori").change(function () {
+            if ($(this).val() == "Yeni Kategori Ekle") {
+                $("#newFoodKategoriInput").slideDown("fast");
+                var dropdown = document.getElementById("fKategori");
+                dropdown.setAttribute("name", "K");
+
+                var newkategori = document.getElementById("nfkategori");
+                newkategori.setAttribute("name", "YemekKategori");
+            } else {
+                $("#newFoodKategoriInput").slideUp("fast");
+                var newkategori = document.getElementById("nfkategori");
+                newkategori.setAttribute("name", "nkategori");
+
+                var dropdown = document.getElementById("fKategori");
+                dropdown.setAttribute("name", "YemekKategori");
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".dropKategori").change(function () {
+            if ($(this).val() == "Yeni Kategori Ekle") {
+                $("#newKategoriInput").slideDown("fast");
+                var dropdown = document.getElementById("Kategori");
+                dropdown.setAttribute("name", "K");
+
+                var newkategori = document.getElementById("nkategori");
+                newkategori.setAttribute("name", "YemekKategori");
+            } else {
+                $("#newKategoriInput").slideUp("fast");
+                var newkategori = document.getElementById("nkategori");
+                newkategori.setAttribute("name", "nkategori");
+
+                var dropdown = document.getElementById("Kategori");
+                dropdown.setAttribute("name", "YemekKategori");
+            }
+        });
+    });
+
+
+</script>
+<script>
+    function dosyaOnizlemeNew(input) {
+        console.log("newdosya");
+        if (input.files && input.files[0]) {
+            var dosyaOkuyucu = new FileReader();
+
+            dosyaOkuyucu.onload = function (e) {
+                var dosyaAdi = input.files[0].name;
+                var id = "";
+                $('.custom-file-label').html(dosyaAdi);
+
+
+
+                var yeniResim = $('<img>').addClass(' p-0 animate__animated animate__fadeInLeft').attr('src', e.target.result).css({ 'max-height': '100%' });
+
+                // Mevcut resimlere ekleyelim
+
+                //$('.img-box-new').html(yeniResim);
+                // $('.img-box-new').append('<i class="fa-solid fa-trash " onclick="ResimiptalNew()" style="font-size: 18px;height: 105%;color: #d51313;" aria-hidden="true"></i>')
+                $('.img-box-new').html('<div  style="position="relative"><i class="fa-solid fa-xmark " onclick="Resimiptal(' + id.split() + ')" style="position:absolute;font-size: 18px;width: 100%;height: 120%;justify-content: right;display: flex;color: #d51313;z-index: 1;" aria-hidden="true"></i><img  class=" p-0 animate__animated animate__fadeInLeft" id="YemekResimNew" src="' + e.target.result + '"  alt="Yemek Resim"  /> </div>  ');
+
+            }
+
+            dosyaOkuyucu.readAsDataURL(input.files[0]);
+        }
+
+    }
+
+    function dosyaOnizleme(input) {
+
+
+        if (input.files && input.files[0]) {
+            var dosyaOkuyucu = new FileReader();
+
+            dosyaOkuyucu.onload = function (e) {
+                var dosyaAdi = input.files[0].name;
+                var id = "";
+                $('.custom-file-label').html(dosyaAdi);
+
+                if ($('.img-box').children().length >= 3) {
+
+                    $('.img-box div:last').remove();
+                    $('.img-box div:last').remove();
+
+
+                } else {
+                    console.log($(".img-box div").children().length);
+                    if ($(".img-box div").children().length > 1) {
+                        // <i> öğesi bulunduğunda yapılacak işlem
+                        id = $('.img-box i:last').attr('onclick').split("(")[1].split(")")[0];
+                        console.log(id);
+                        $('.img-box i:last').remove();
+                        // Burada başka bir işlem yapabilirsiniz
+                    } else {
+                        // <i> öğesi bulunmadığında yapılacak işlem
+
+                        // Burada başka bir işlem yapabilirsiniz
+                    }
+
+
+                    $('.img-box div').addClass('col-5');
+
+                }
+                //$('.img-box').addClass('p-2');
+                //$('.img-box').children().removeClass('col').addClass('col-5');
+
+                var yeniResim = $('<img>').addClass(' p-0 animate__animated animate__fadeInLeft').attr('src', e.target.result).css({ 'max-height': '100%' });
+
+                // Mevcut resimlere ekleyelim
+
+                //$('.img-box').append(yeniResim);
+                //$('.img-box').append('<i class="fa-solid fa-trash " onclick="Resimiptal()" style="font-size: 18px;height: 105%;color: #d51313;" aria-hidden="true"></i>')
+
+                $("<div></div>", {
+                    "class": "col-2 d-flex align-items-center",
+                    html: "<i class='fa-solid fa-arrow-right p-0' style='font-size: 20px;'></i>"
+                }).appendTo(".img-box");
+                $('.img-box').append('<div class="col-5" style="position="relative"><i class="fa-solid fa-xmark " onclick="Resimiptal(' + id.split() + ')" style="position:absolute;font-size: 18px;width: 71px;height: 105%;justify-content: right;display: flex;color: #d51313;z-index: 1;" aria-hidden="true"></i><img  class=" p-0 animate__animated animate__fadeInLeft" id="duzenleYemekResim" src="' + e.target.result + '"  alt="Yemek Resim" /> </div>  ');
+                $('.img-box').animate({ width: '220px' }, 1000);
+                //$('.img-box').css({ 'width': '220px' });
+            }
+
+            dosyaOkuyucu.readAsDataURL(input.files[0]);
+        }
+    }
+    function Resimiptal(id) {
+        console.log(id);
+        $('.img-box div:last').remove();
+        $('.img-box div:last').remove();
+        $('.img-box-new div:last').remove();
+        $('.img-box-new').html('<div ><i class="col p-0 fa-solid fa-utensils"></i></div>');
+
+        if (id != undefined) {
+            $('.img-box div').append('<i class="fa-solid fa-trash " onclick="ResimKaldır(' + id + ')" style="position:absolute;font-size: 18px;width: 105%;height: 105%;justify-content: right;display: flex;color: #d51313;z-index: 1;" aria-hidden="true"></i>');
+
+        }
+
+        $('.img-box div').removeClass('col-5');
+        var fileinput = '<input type="file" class="custom-file-input" id="foodimg" accept=".jpg,.jpeg,.png" aria-describedby="foodimg" onchange="dosyaOnizleme(this);"><label class= "custom-file-label" style = "text-align:start;" for= "inputGroupFile04" data-browse= "Yükle" >Resim Seç</label > ';
+        $('.custom-file').html(fileinput);
+
+        var fileinputNew = '<input type="file" class="custom-file-input" id="foodimgnew" accept=".jpg,.jpeg,.png" aria-describedby="foodimg" onchange="dosyaOnizlemeNew(this);"><label class="custom-file-label" style = "text-align:start;" for= "inputGroupFile04" data-browse= "Yükle" > Resim Seç</label> ';
+        $('.custom-file-new').html(fileinputNew);
+
+        $('.img-box').animate({ width: '120px' }, 1000);
+    }
+</script>
+
+<script>
+    $('.ui.dropdown')
+        .dropdown()
+        ;
+</script>

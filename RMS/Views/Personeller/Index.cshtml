@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RMS.Models.Personeller>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+<div class="row justify-content-center align-items-center" style="height:75vh">
+
+    <div class=" col-12 col-lg-9" style="padding: 40px; border-radius: 20px; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15) !important; background-color: white;">
+
+        <p class="text-center">
+            <a href="@Url.Action("Create", "Personeller")" class="btn btn-outline-success">Yeni Personel Oluştur</a> <br />
+
+
+
+            <span class="h2">Mevcut Personeller</span>
+        </p>
+
+
+
+
+
+
+        <table id="example" class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col"></th>
+                    <th scope="col">İsim</th>
+                    <th scope="col">Soyisim</th>
+                    <th scope="col">Kullanıcı Adı</th>
+                    <th scope="col">Şifre</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody class="justify-content-center">
+                @foreach (var personel in Model)
+                {
+                    <tr>
+                        <th scope="row">@personel.PersonelId</th>
+                        <td>
+                            <img class="img-profile rounded-circle" style="max-block-size:32px" src="@Html.Action("GetirKisiResim", "Giris", new { personel = personel })" />
+                        </td>
+                        <td>@personel.Ad</td>
+                        <td>@personel.Soyad</td>
+                        <td>@personel.KullaniciAdi</td>
+                        <td>@personel.Sifre</td>
+                        <td>@personel.Rol</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Personeller", new { id = personel.PersonelId })" class="btn btn-outline-primary">Düzenle</a>
+                            <a href="@Url.Action("Delete", "Personeller", new { id = personel.PersonelId })" class="btn btn-outline-primary">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            order: [[0, 'asc']],
+            responsive: true,
+
+        });
+    });
+</script>

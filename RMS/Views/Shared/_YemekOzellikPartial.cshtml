@@ -1,0 +1,489 @@
+﻿@model RMS.Models.KatalogViewModel
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous">
+
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/transition.min.css" integrity="sha512-HgM+2tpAdAIDm77Pe0gKU78lxA5MPfurAZFf1KDm1l/0npc9YRh+7rqDXmBKajNu3oFtiOKX+fBrK0W/8wRecw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/dropdown.min.css" integrity="sha512-tdyzfjYDk2OR9L10jvzzuGUB0Rvl5fyMW/Z8yfbYyyENfuXxtcDtEq7d/PdiA0hzQzXjWwvZasjEp8Joli2tkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+
+<div class="col-xl-12  mb-3 row">
+
+    <div class="col-xl-5 col-10">
+        <select class="form-control form-select ui dropdown search" id="katalogSelect">
+
+            <option value="Katalog Seçin">Katalog Seçin</option>
+            <option value="Katalog Ekle">Katalog Ekle</option>
+            @foreach (var item in Model.YemekKataloglar)
+            {
+                <option value="@item.KatalogId">@item.KatalogAd</option>
+
+            }
+
+
+        </select>
+    </div>
+    <div class="col-xl-7 col-1"><button class="btn btn-outline-primary " data-bs-toggle="modal" data-bs-target="#kt_modal_stacked_1"><i class="fa-regular fa-pen-to-square"></i></button></div>
+
+
+
+
+</div>
+<div class="col">
+    @*<div class="row align-items-center pb-2">
+
+            <div class="col-md-3">   <div class="col-md-1"><i class="fa fa-trash-o" aria-hidden="true"></i></div></div>
+            <div class="col-md-5">Eklemek için buraya sürükleyin</div>
+            <div class="col-md-4 d-flex">
+                <div class="row align-items-center m-0 ">
+                    <div class="col-sm-10"><span>Tüm özellikler   </span></div>
+                    <div class="col-sm-1 float-right"><button class="btn btn-outline-primary " data-bs-toggle="modal" data-bs-target="#kt_modal_stacked_3"><i class="fa-regular fa-pen-to-square"></i></button></div>
+
+                </div>
+
+
+            </div>
+        </div>*@
+    <div class="row">
+
+
+
+        <div class="col-xl-3 col-md-5">
+
+            <div class="col-md-12 d-flex align-items-center" style="height:50px;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+            <div class="list-group card border-left-danger  col-md-11" style="height:50px" id="trash">
+
+            </div>
+        </div>
+
+
+
+        <div class="col-xl-5 col-md-7  " style="height:fit-content;">
+            <div class="col-md-12 d-flex align-items-center" style="height:50px;">Eklemek için buraya sürükleyin</div>
+            <div class="col-md-12 list-group card border-left-success" style="padding-right:initial">
+
+                <ul class="list-group" style="min-height:50px" id="demo1">
+
+                    @foreach (var item in Model.Katalog_Ozellikler)
+                    {
+                        <li class="list-group-item " data-item-id="@item.OzellikId">@Model.YemekOzellikler.FirstOrDefault(x => x.OzellikId == item.OzellikId).Yemek_Ozellik</li>
+                    }
+
+
+
+                </ul>
+            </div>
+
+
+        </div>
+        <div class="col-xl-4 col-md-12">
+            <div class="row col-md-12 align-items-center m-0 " style="height:50px;">
+                <div class="col-10"><span>Tüm özellikler   </span></div>
+                <div class="col-1 float-right"><button class="btn btn-outline-primary  modal3" data-bs-toggle="modal" data-bs-target="#kt_modal_stacked_3"><i class="fa-regular fa-pen-to-square"></i></button></div>
+
+            </div>
+
+
+            <ul class="list-group overflow-auto  " id="demo2" style="max-height:500px;">
+                @foreach (var item in Model.YemekOzellikler)
+                {
+                    <li class="list-group-item" data-item-id="@item.OzellikId">
+                        @item.Yemek_Ozellik
+
+
+                        @*<a onclick="OzellikEditStart(@item.OzellikId)" class="btn btn-outline-warning float-right">Düzenle</a> <span></span>*@
+                    </li>
+                }
+
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Katalog düzenleme modal -->
+
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_1">
+    <div class="modal-dialog  modal-dialog-centered" style="max-width:400px">
+        <div class="modal-content overflow-auto" style="height:500px;">
+            <div class="modal-header">
+                <div class="col-12"> <h2 class="modal-title text-center">Yemek Katalog</h2></div>
+
+
+            </div>
+            <button onclick="Close()" type="button" class="x" aria-hidden="true">❌</button>
+            <div class="modal-body">
+
+
+
+
+
+                @{
+                                <div class="form-horizontal ">
+
+
+                                    @using (Ajax.BeginForm("KatalogCreate", "YemekKatalog", new AjaxOptions { HttpMethod = "POST", OnSuccess = "YeniKatalogSucces" }, new { @class = "ajax-form w-100", id = "KatalogEkleForm" }))
+                                    {
+                                        RMS.Models.YemekKatalog k = new RMS.Models.YemekKatalog();
+                                        <div class="form-group row justify-content-center">
+
+                                            <div class="col-md-9 col-9">
+
+                                                @*  <input class="form-control text-box single-line" id="KatalogAd" name="KatalogAd" type="text" required>*@
+
+
+                                                @Html.EditorFor(model => k.KatalogAd, "KatalogAd", new { htmlAttributes = new { name = "KatalogAd", @class = "form-control", placeholder = "Katalog Adı", required = "required", id = "KatalogAd" } })
+
+
+                                                @Html.ValidationMessageFor(model => k.KatalogAd, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-3 col-3">
+                                                @*<div class="btn btn-success " onclick="Ekle()">Oluştur</div>*@
+                                                <button class="btn btn-success" type="submit">Oluştur</button>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div id="kataloglarParent">
+                                        <div class="row " id="kataloglar" style="height:100px;">
+                                            <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" style="max-height:200px;">
+
+                                                <div class="alert alert-secondary" role="alert">
+                                                    Katalog kaldırmak için kataloğun üstündeki çöp kutusu simgesine, ismini düzeltmek için düzeltme simgesine tıklayabilirsiniz.
+                                                </div>
+
+                                                @foreach (var item in Model.YemekKataloglar)
+                                                {
+                                                    @*<div class="btn  btn-danger  small  text-responsive m-1 d-flex justify-content-center trigger-btn  pt-2 pb-2" data-toggle="modal"
+            onclick="document.getElementById('myModal').showModal();" value="@item.KatalogId">@item.KatalogAd</div>*@
+
+
+
+
+
+                                                  
+                                                    <div class="col-6 p-0">
+
+
+
+                                                        <div class="col-12 p-0 d-flex align-items-center  bg-gray-200 rounded-pill mb-2  " style="height:48px">
+                                                            <div class="col-6 m-0 pl-4 d-flex align-items-center  ">@item.KatalogAd</div>
+                                                            <div class="col-3 m-0 d-flex align-items-center justify-content-end pr-0">
+                                                                <a href="#toggle-form-@item.KatalogId" class="p-0" data-toggle="collapse"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+
+                                                            </div>
+                                                            <div class="col-3 m-0 d-flex align-items-center justify-content-center">
+                                                                <a class="btn p-0" style="color: #e74a3b;"
+                                                                   data-toggle="modal" onclick="Modal2(@item.KatalogId,'@item.KatalogAd')" value="@item.KatalogId">
+                                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <div id="toggle-form-@item.KatalogId" class="collapse col-12" aria-expanded="false">
+                                                            <label class="zip-label  ">Yeni Ad</label>
+                                                            <input type="text" tabindex="1" id="input-katalogad-@item.KatalogId" required>
+                                                            <button class="submit-btn" onclick="KyeniAd(@item.KatalogId)" type="submit">Onayla</button>
+                                                        </div>
+
+                                                    </div>
+
+
+
+
+                                                }
+
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                }
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Katalog düzenleme modal son -->
+<!-- Katalog Emin misiniz? modal  -->
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_2">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ;">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-12">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                </div>
+
+
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <h4 class="modal-title">Emin misiniz?</h4>
+            <div class="modal-body">
+                <p><b id="modal-katalog-ad"></b> adlı kataloğu silmek istediğinize emin misiniz? Evet demeniz takdirinde kataloğa bir daha erişemezsiniz!</p>
+            </div>
+            <div class="modal-footer justify-content-center" id="modal-footer">
+                <a href="#" class="btn btn-info" data-bs-dismiss="modal">İptal et</a>
+                <a id="modal-sil" class="btn btn-danger">Evet sil!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Katalog Emin misiniz? modal son -->
+<!-- Özellik düzenleme modal -->
+
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_3">
+    <div class="modal-dialog  modal-dialog-centered" style="max-width:400px">
+        <div class="modal-content overflow-auto" style="height:500px;">
+            <div class="modal-header">
+                <div class="col-12"> <h2 class="modal-title text-center">Yemek Özellik</h2></div>
+
+
+            </div>
+            <button type="button" class="x" data-bs-dismiss="modal" aria-hidden="true">❌</button>
+            <div class="modal-body">
+
+
+
+
+                @{
+                                <div class="form-horizontal ">
+
+
+                              
+                                    @using (Ajax.BeginForm("OzellikCreate", "YemekKatalog", new AjaxOptions { HttpMethod = "POST", OnSuccess = "YeniOzellikSucces" }, new { @class = "ajax-form w-100", id = "OzellikEkleForm" }))
+                                    {
+                                        RMS.Models.YemekOzellik o = new RMS.Models.YemekOzellik();
+                                        <div class="form-group row justify-content-center">
+
+                                            <div class="col-md-9 col-9">
+
+                                                @* <input class="form-control text-box single-line" id="OzellikAd" name="OzellikAd" type="text" required>*@
+
+
+                                                @Html.EditorFor(model => o.Yemek_Ozellik, "KatalogAd", new { htmlAttributes = new { name = "OzellikAd", @class = "form-control", placeholder = "Özellik Adı", required = "required", id = "OzellikAd" } })
+
+
+                                                @Html.ValidationMessageFor(model => o.Yemek_Ozellik, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-3 col-3">
+                                                @* <div class="btn btn-success " onclick="EkleOzellik()">Oluştur</div>*@
+                                                <button class="btn btn-success" type="submit">Oluştur</button>
+                                            </div>
+                                        </div>
+                                    }
+
+
+
+
+
+                                    <div id="ozelliklerParent">
+                                        <div class="row " id="ozellikler" style="height:100px;">
+                                            <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" style="max-height:200px;">
+
+
+
+
+
+                                                <div class="alert alert-secondary" role="alert">
+                                                    Özellik kaldırmak için özelliğin üstündeki çöp simgesine, ismini düzeltmek için düzeltme simgesine tıklayabilirsiniz.
+                                                </div>
+
+                                                @foreach (var item in Model.YemekOzellikler)
+                                                {
+                                                    @*<div class="btn  btn-danger  small  text-responsive m-1 d-flex justify-content-center trigger-btn  pt-2 pb-2" data-toggle="modal"
+            onclick="document.getElementById('myModal').showModal();" value="@item.KatalogId">@item.KatalogAd</div>*@
+
+
+
+
+                                                    <div class="col-6 p-0">
+
+
+
+                                                        <div class="col-12 p-0 d-flex align-items-center  bg-gray-200 rounded-pill mb-2  " style="height:48px">
+                                                            <div class="col-6 m-0 pl-4 d-flex align-items-center  ">@item.Yemek_Ozellik</div>
+                                                            <div class="col-3 m-0 d-flex align-items-center justify-content-end pr-0">
+                                                                <a href="#toggle-form-@item.OzellikId" class="p-0" data-toggle="collapse"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+
+                                                            </div>
+                                                            <div class="col-3 m-0 d-flex align-items-center justify-content-center">
+                                                                <a class="btn p-0" style="color: #e74a3b;"
+                                                                   data-toggle="modal" onclick="Modal2Ozelllik(@item.OzellikId,'@item.Yemek_Ozellik')" value="@item.OzellikId">
+                                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                                </a>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <div id="toggle-form-@item.OzellikId" class="collapse col-12" aria-expanded="false">
+                                                            <label class="zip-label  ">Yeni Ad</label>
+                                                            <input type="text" tabindex="1" id="input-ozellikad-@item.OzellikId" required>
+                                                            <button class="submit-btn" onclick="OyeniAd(@item.OzellikId)" type="submit">Onayla</button>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                }
+
+
+
+
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                }
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- Özellik düzenleme modal son -->
+<!-- Özellik Emin misiniz? modal  -->
+<div class="modal fade" tabindex="-1" id="kt_modal_stacked_4">
+    <div class="modal-dialog modal-confirm" style="margin-top:15% ;">
+        <div class="modal-content">
+            <div class="modal-header row">
+                <div class="col-12">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                </div>
+
+
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <h4 class="modal-title">Emin misiniz?</h4>
+            <div class="modal-body">
+                <p><b id="modal-ozellik-ad"></b> adlı özelliği silmek istediğinize emin misiniz? Evet demeniz takdirinde özelliğe bir daha erişemezsiniz! Sildiğiniz özelliğe sahip olan kataloglar altından bu özellik kaldırılacaktır!</p>
+            </div>
+            <div class="modal-footer justify-content-center" id="modal-footer">
+                <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">İptal et</a>
+                <a id="modal-sil-ozellik" class="btn btn-danger">Evet sil!</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Özellik Emin misiniz? modal son -->
+@{
+
+    var data = ViewBag.EklemeDurumu;
+
+
+
+}<div id="viewbag">@data</div>
+
+
+
+
+
+
+
+<script>
+
+    var elements = Array.prototype.slice.call(document.querySelectorAll("[data-bs-stacked-modal]"));
+
+    if (elements && elements.length > 0) {
+        elements.forEach((element) => {
+            if (element.getAttribute("data-kt-initialized") === "1") {
+                return;
+            }
+
+            element.setAttribute("data-kt-initialized", "1");
+
+            element.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const modalEl = document.querySelector(this.getAttribute("data-bs-stacked-modal"));
+
+                if (modalEl) {
+                    const modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                }
+            });
+        });
+    }
+
+
+    function Modal2(KatalogId, KatalogAd) {
+        $("#modal-sil")
+            .html("Evet sil!")
+            .attr("onclick", "Sil(" + KatalogId + ")");
+        $("#modal-katalog-ad").text(KatalogAd);
+        $('#kt_modal_stacked_2').modal('show');
+    }
+
+
+    function Modal2Ozelllik(OzellikId, OzellikAd) {
+        $("#modal-sil-ozellik")
+            .html("Evet sil!")
+            .attr("onclick", "SilOzellik(" + OzellikId + ")");
+        $("#modal-ozellik-ad").text(OzellikAd);
+        $('#kt_modal_stacked_4').modal('show');
+    }
+
+
+
+
+
+    function Close() {
+
+        $('#kt_modal_stacked_1').modal('hide');
+        document.getElementById("katalogSelect").selectedIndex = 0;
+    }
+
+
+    $('.ui.dropdown').dropdown();
+       
+</script>

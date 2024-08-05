@@ -1,0 +1,44 @@
+﻿@model RMS.Models.Masalar
+@{
+    Layout = "~/Views/Shared/justbootstrap.cshtml";
+}
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Masalar</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MasaAd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MasaAd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kapasite)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kapasite)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Durum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Durum)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MasaId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

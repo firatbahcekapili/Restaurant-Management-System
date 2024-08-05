@@ -1,0 +1,50 @@
+﻿body {
+    background-color: #EEEEEE;
+}
+
+.panel {
+    background-color: #f7f7f9;
+}
+
+.table {
+    --bs-table-bg: transparent;
+}
+
+.sections .section {
+    display: none;
+}
+
+.ds-btn li {
+    list-style: none;
+    padding: 10px;
+}
+
+    .ds-btn li a span {
+        min-width: 160px;
+        padding-left: 15px;
+        padding-right: 5px;
+        width: 100%;
+        display: inline-block;
+        text-align: left;
+    }
+
+        .ds-btn li a span small {
+            width: 100%;
+            display: inline-block;
+            text-align: left;
+        }
+
+.bi-x-circle:hover {
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0;
+}
+
+.dtsb-titleRow {
+    display: none;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    min-width: 50px;
+}

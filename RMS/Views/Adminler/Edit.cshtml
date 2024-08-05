@@ -1,0 +1,109 @@
+﻿@model RMS.Models.Adminler
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+
+
+
+
+
+<div class="container d-flex align-items-center justify-content-center "  style="height:100vh;">
+
+   
+
+        <div class="row card border-0 p-4 border shadow " style="background-color: white; width:350px ">
+
+            
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+            <h4 class="card-title text-center">Admin Düzenle</h4>
+            <div class="form-horizontal card-body d-block justify-content-center">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.AdminId)
+
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.Ad, "Ad", htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.Ad, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Ad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.Soyad, "Soyad", htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.Soyad, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Soyad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cinsiyet, htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+
+                        @Html.DropDownListFor(model => model.Cinsiyet, new SelectList(Enum.GetValues(typeof(RMS.Models.Cinsiyet))), new { @class = "form-control form-select" })
+                        @Html.ValidationMessageFor(model => model.Cinsiyet, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rol, "Rol", htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.DropDownListFor(model => model.Rol, new List<SelectListItem>
+                        {
+                            new SelectListItem { Value = "Yönetici", Text = "Yönetici" },
+                            new SelectListItem { Value = "Personel", Text = "Personel" }
+                        }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.aKullaniciAdi, "Kullanıcı Adı", htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.aKullaniciAdi, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.aKullaniciAdi, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.aSifre, "Şifre", htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.aSifre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.aSifre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <div class="col-md-offset-2 col d-flex justify-content-center">
+                        <input type="submit" value="Kaydet" class="btn btn-primary pr-3 pl-3" />
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+
+        
+
+
+    </div>
+
+   
+
+
+
+
+
+
+
+
+
+
+
+

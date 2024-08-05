@@ -1,0 +1,14 @@
+﻿@model List<RMS.Models.YemekKatalog>
+
+
+@foreach (var katalog in Model)
+{
+    <div class="form-check">
+        <input class="form-check-input katalogcheck position-static" type="checkbox" id="@katalog.KatalogId" value="@katalog.KatalogId" aria-label="..." >
+        <label class="form-check-label" for="invalidCheck">
+            @katalog.KatalogAd
+        </label>
+    </div>
+}
+
+

@@ -1,0 +1,61 @@
+﻿@model RMS.Models.Personeller
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="container d-flex align-items-center justify-content-center" style="height:100vh;">
+    <div class="row card border-0 p-4 shadow" style="background-color: white; width: 350px;">
+        <h4 class="card-title text-center">Silmek istediğine emin misin?</h4>
+        <hr />
+        <div class="form-horizontal card-body d-flex justify-content-center">
+            <dl class="row" style="width:250px;">
+                <dt class="col-6">
+                    @Html.DisplayNameFor(model => model.Ad)
+                </dt>
+                <dd class="col-6">
+                    @Html.DisplayFor(model => model.Ad)
+                </dd>
+
+                <dt class="col-6">
+                    @Html.DisplayNameFor(model => model.Soyad)
+                </dt>
+                <dd class="col-6">
+                    @Html.DisplayFor(model => model.Soyad)
+                </dd>
+
+                <dt class="col-6">
+                    @Html.DisplayNameFor(model => model.Rol)
+                </dt>
+                <dd class="col-6">
+                    @Html.DisplayFor(model => model.Rol)
+                </dd>
+
+                <dt class="col-6">
+                    @Html.DisplayNameFor(model => model.KullaniciAdi)
+                </dt>
+                <dd class="col-6">
+                    @Html.DisplayFor(model => model.KullaniciAdi)
+                </dd>
+
+                <dt class="col-6">
+                    @Html.DisplayNameFor(model => model.Sifre)
+                </dt>
+                <dd class="col-6">
+                    @Html.DisplayFor(model => model.Sifre)
+                </dd>
+            </dl>
+
+
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color text-center">
+                <input type="submit" value="Sil" class="btn btn-danger" />
+            </div>
+        }
+    </div>
+</div>

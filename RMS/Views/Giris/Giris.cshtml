@@ -1,0 +1,133 @@
+﻿@model RMS.Models.adminpersonelViewModel
+@{
+    Layout = "~/Views/Shared/justbootstrap.cshtml";
+}
+<link href="~/Content/PagesContent/Giris/giris.css" rel="stylesheet" />
+<div class="container login-container">
+    <div class="row">
+        <div class="col-md-6 login-form-1">
+
+
+
+            @using (Ajax.BeginForm("AdminGiris", "Giris", new AjaxOptions { HttpMethod = "POST", OnSuccess = "AdminGirisSuccess" }, new { @class = "ajax-form w-100", id = "AdminGirisForm" }))
+            {
+                RMS.Models.Adminler a = new RMS.Models.Adminler();
+
+                <div>
+                    <h3>Yönetici Girişi</h3>
+                </div>
+                <div class=" ">
+
+                    <div class="p-2 row d-flex justify-content-center">
+                        @*<input type="text" class="form-control" id="floatingInput" name="aKullaniciAdi" placeholder="Kullanıcı Adı" style="width:300px" value="@ViewBag.atemp">*@
+                        @Html.EditorFor(model => a.aKullaniciAdi, "aKullaniciAdi", new { htmlAttributes = new { name = "aKullaniciAdi", @class = "form-control col-12", placeholder = "Kullanıcı Adı", required = "required", id = "aKullaniciAdi" } })
+                        @Html.ValidationMessageFor(model => a.aKullaniciAdi, "", new { @class = "text-white col-12" })
+                    </div>
+
+                    <div class="p-2 row d-flex justify-content-center ">
+                        @*<input type="password" class="form-control" id="floatingPassword" name="aSifre" placeholder="Şifre" style="width:300px">*@
+                        @Html.PasswordFor(model => a.aSifre, new { name = "aSifre", @class = "form-control col-12", placeholder = "Şifre", required = "required", id = "aSifre" })
+
+                        @Html.ValidationMessageFor(model => a.aSifre, "", new { @class = "text-white col-12" })
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="form-floating p-2  d-flex justify-content-center  ">
+                    <input class="btn btnSubmit" type="submit" value="Giriş" style="width:100px;">
+
+                </div>
+                @*<div class="">
+
+                        <a href="#" class="btnForgetPwd">Şifremi Unuttum</a>
+                    </div>*@
+
+
+                <div class="p-2 mt-3 d-flex justify-content-center " id="aAlert" style="">
+                    <div class="alert @ViewBag.adurum   " role="alert">
+                        @ViewBag.amessage
+                    </div>
+                </div>
+
+
+
+            }
+
+
+
+
+
+
+        </div>
+        <div class="col-md-6 login-form-2 ">
+
+
+            <div class="login-logo">
+                <img src="https://www.freepnglogos.com/uploads/share-png/slideshare-icon-download-icons-2.png" alt="" />
+            </div>
+
+            @using (Ajax.BeginForm("PersonelGiris", "Giris", new AjaxOptions { HttpMethod = "POST", OnSuccess = "PersonelGirisSuccess" }, new { @class = "ajax-form w-100", id = "PersonelGirisForm" }))
+
+            {
+                RMS.Models.Personeller p = new RMS.Models.Personeller();
+                <div>
+                    <h3>Personel Girişi</h3>
+                </div>
+                <div class=" ">
+
+                    <div class="form-group p-2 row d-flex justify-content-center ">
+                        @*<input type="text" class="form-control" id="floatingInput" name="KullaniciAdi" placeholder="Kullanıcı Adı" style="width:300px" value="@ViewBag.temp">*@
+                        @Html.EditorFor(model => p.KullaniciAdi, "KullaniciAdi", new { htmlAttributes = new { name = "KullaniciAdi", @class = "form-control col-12", placeholder = "Kullanıcı Adı", required = "required", id = "KullaniciAdi" } })
+                        @Html.ValidationMessageFor(model => p.KullaniciAdi, "", new { @class = "text-white col-12" })
+
+
+                    </div>
+
+                    <div class="p-2 row d-flex justify-content-center  ">
+                        @*  <input type="password" class="form-control" id="floatingPassword" name="Sifre" placeholder="Şifre" style="width:300px">*@
+                        @Html.PasswordFor(model => p.Sifre, new { name = "Sifre", @class = "form-control col-12", placeholder = "Şifre", required = "required", id = "Sifre" })
+
+                        @Html.ValidationMessageFor(model => p.Sifre, "", new { @class = "text-white col-12" })
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="form-floating p-2 d-flex justify-content-center ">
+                    <input class="btn btnSubmit" type="submit" value="Giriş" style="width:100px;">
+
+                </div>
+                @*<div class="">
+
+                        <a href="#" class="btnForgetPwd">Şifremi Unuttum</a>
+                    </div>*@
+
+
+                <div class="p-2 mt-3 d-flex justify-content-center " id="pAlert" style="">
+                    <div class="alert @ViewBag.durum   " role="alert">
+                        @ViewBag.message
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.js"></script>
+<script src="~/Content/PagesContent/Giris/giris.js"></script>

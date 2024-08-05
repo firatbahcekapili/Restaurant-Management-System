@@ -1,0 +1,362 @@
+﻿@model List<RMS.Models.Masalar>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<style>
+
+    form {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .submit-btn, .toggle-btn {
+        height: 56px;
+        width: 175.5px;
+        font-size: 12px;
+        font-weight: 600;
+        border: none;
+        margin-top: 10px;
+        background-color: #2371DF;
+        color: #FFFFFF;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+
+    .toggle-btn {
+        margin-top: 30px;
+        opacity: 1;
+        height: 56px;
+    }
+
+    .collapse.in + .toggle-btn, .collapsing + .toggle-btn {
+        margin-top: -50px;
+        opacity: 0;
+        transition: margin .35s ease, opacity .2s ease, height .2s ease;
+    }
+
+    #toggle-form {
+        width: 260px;
+        margin: 0 auto;
+    }
+
+        #toggle-form.in + .toggle-btn {
+            opacity: 0;
+        }
+
+    .zip-label {
+        transform: translateY(14px);
+        background: white;
+        margin: 0;
+        font-weight: 900 !important;
+        font-size: 15px;
+    }
+
+    input {
+        height: 60px;
+        width: 175.5px;
+        display: block;
+        font-size: 18px;
+        background-color: #fff;
+        background-image: none;
+        background-clip: padding-box;
+        border-radius: 5px;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        cursor: text;
+        color: black;
+        text-align: center;
+        margin: 0 auto;
+        border: 2px solid black;
+        color: black;
+        max-width: 260px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="col d-flex align-items-center mb-3 ">
+
+    <i class="fa-solid fa-filter mr-2"></i>
+
+
+    <div class="mr-2">
+        <select class="form-control  " id="konumSecimi" onchange="Filtrele()" style="width:200px;">
+            <option value="TumKonumlar">Tüm Konumlar</option>
+            @{
+                HashSet<string> eklenenKonumlar = new HashSet<string>();
+            }
+            @foreach (var masakonum in Model)
+            {
+                if (!eklenenKonumlar.Contains(masakonum.Konum))
+                {
+                    <option value="@masakonum.Konum">@masakonum.Konum</option>
+                    eklenenKonumlar.Add(masakonum.Konum);
+                }
+            }
+
+        </select>
+    </div>
+
+
+
+
+    <div class="btn btn-success MasaEkle" data-bs-toggle="modal" data-bs-target="#Masa-Ekle-Modal">Masa Ekle</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+<!-- Masalar -->
+<div class="d-flex row" id="masaAlani">
+    <div class="d-flex row" id="masaparent">
+        @foreach (var masa in Model)
+        {
+            String durum = "danger";
+            if (masa.Durum != "Dolu")
+            {
+                durum = "success";
+            }
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4 masa-konum @(masa.Konum)" id="@masa.MasaAd.Replace(" ","")">
+                <div class="card border-left-@durum shadow h-100 py-2 col btn" id="@masa.MasaId">
+                    <div class="card-body col">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2 text-left">
+                                <div class="col-12 text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    @*<span id="MasaAd-@masa.MasaId">@masa.MasaAd</span> <a class="btn EditName" id="Edit-@masa.MasaId"><i class="fa-regular fa-pen-to-square "></i></a>*@
+                                    <i class="fas fa-chair fa-2x text-gray-300"></i> <span id="MasaAd-@masa.MasaId">@masa.MasaAd</span> <a href="#toggle-form-@masa.MasaId" data-toggle="collapse" class="btn EditName  " id="Edit-@masa.MasaId"><i class="fa-regular fa-pen-to-square "></i></a>
+
+                                    <div id="toggle-form-@masa.MasaId" class="collapse" aria-expanded="false">
+
+                                        <div class="col d-flex justify-content-center align-items-center ">
+
+                                            <label class="zip-label">Yeni Ad</label>
+                                        </div>
+
+                                        <input type="text" name="name" value="" placeholder="Yeni adı girin" tabindex="1" id="YeniAd-@masa.MasaId" required>
+
+                                        <div class="col d-flex justify-content-center align-items-center ">
+                                            <button class="submit-btn Adbtn" type="submit">Onayla</button>
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                    <span class="row " style="width:max-content;"> </span>
+                                </div>
+
+
+                                <div class="col d-flex align-items-center  mb-1" style="width:max-content;">
+
+                                    <label class="mr-4">Kapasite: @masa.Kapasite </label>
+                                    <input type="number" id="kapasaite-@masa.MasaId" class="form-control KapasiteDegis" placeholder="Kapasite giriniz" max="10" min="0" value="@masa.Kapasite" style="width:150px;" />
+
+
+                                </div>
+
+
+                                <div class=" form-outline mb-1">
+                                    <div class="col d-flex">
+
+                                        <select class="form-control " id="konumDegisim" masaid="@masa.MasaId" onchange="">
+
+                                            @{
+                                                HashSet<string> eklenenKonumlarr = new HashSet<string>();
+                                            }
+                                            @foreach (var masakonumm in Model)
+                                            {
+                                                if (!eklenenKonumlarr.Contains(masakonumm.Konum))
+                                                {
+                                                    <option value="@masakonumm.Konum" @(masa.Konum == masakonumm.Konum ? "selected" : "")>@masakonumm.Konum</option>
+                                                    eklenenKonumlarr.Add(masakonumm.Konum);
+                                                }
+                                            }
+
+                                        </select>
+                                        <a href="#toggle-formkonum-@masa.MasaId" data-toggle="collapse" class="btn EditKonum  " id="EditKonum-@masa.MasaId"><i class="fa-regular fa-plus "></i></a>
+
+                                    </div>
+
+
+
+                                    <div id="toggle-formkonum-@masa.MasaId" class="collapse YeniKonumDiv-@masa.MasaId " aria-expanded="false">
+
+                                        <div class="col d-flex justify-content-center align-items-center ">
+
+                                            <label class="zip-label">Yeni Konum</label>
+                                        </div>
+                                        <input type="text" name="name" value="" placeholder="Yeni Konum girin" tabindex="1" id="YeniKonum-@masa.MasaId" required>
+                                        <div class="col d-flex justify-content-center align-items-center ">
+                                            <button class="submit-btn Konumbtn" type="submit">Onayla</button>
+                                        </div>
+                                    </div>
+
+
+
+                                    <span></span>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control w-50 " id="durumDropdown" onchange="DurumuDegistir(@masa.MasaId, this.value)">
+                                        <option value="Dolu" @(masa.Durum == "Dolu" ? "selected" : "")>Dolu</option>
+                                        <option value="Boş" @(masa.Durum == "Boş" ? "selected" : "")>Boş</option>
+                                    </select>
+
+
+                                    <a href="#silOnayModal" class="x delete" id="delete-@masa.MasaId-@masa.MasaAd" data-toggle="modal">
+
+                                        <i class="fa-solid fa-trash" style="color: #da1b1b;"></i>
+                                    </a>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<!-- Masa Sil Onay Modal  -->
+<div id="silOnayModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                    <i class="fa fa-trash"></i>
+                </div>
+                <h4 class="modal-title w-100">Emin misiniz?</h4>
+                <button type="button" class="x" data-dismiss="modal" aria-hidden="true">❌</button>
+            </div>
+            <div class="modal-body">
+                <p><span class="font-weight-bold" id="masaadmodal"></span> adlı masayı silmek istediğinize emin misiniz?</p>
+            </div>
+            <div class="modal-footer justify-content-center" id="delete-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Masa Ekle Modal  -->
+<div class="modal fade" id="Masa-Ekle-Modal">
+    <div class="modal-dialog  modal-dialog-centered" style="max-width:400px">
+        <div class="modal-content" style="height:450px;">
+            <div class="modal-header flex-column">
+                <div class="col-12"> <h2 class="modal-title text-center">Masa Ekle</h2></div>
+
+
+            </div>
+            <button type="button" class="x" data-bs-dismiss="modal" aria-hidden="true">❌</button>
+            <div class="modal-body ">
+
+
+
+
+                <div class="row d-flex justify-content-center align-items-center h-100">
+
+                    @using (Ajax.BeginForm("MasaEkle", "Masalar", new AjaxOptions { HttpMethod = "POST", OnSuccess = "YeniMasaSucces" }, new { @class = "ajax-form w-100", id = "MasaEkleForm" }))
+                    {
+                        RMS.Models.Masalar m = new RMS.Models.Masalar();
+
+                        @Html.AntiForgeryToken()
+
+
+
+                        <div class="form-group">
+                            @Html.EditorFor(model => m.MasaAd, "MasaAd", new { htmlAttributes = new { name = "MasaAd", @class = "form-control", placeholder = "Masa Adı", required = "required", id = "YeniMasaAd" } })
+                            @Html.ValidationMessageFor(model => m.MasaAd, "", new { @class = "text-danger", name = "MasaAd" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.EditorFor(model => m.Kapasite, new { htmlAttributes = new { @class = "form-control", placeholder = "Kapasite", type = "number", required = "required", id = "YeniKapasite", min = "0" } })
+                            @Html.ValidationMessageFor(model => m.Kapasite, "", new { @class = "text-danger", name = "Kapasite" })
+
+                        </div>
+
+                        <div class="form-group col-md-12 d-flex justify-content-center" style="padding-left: 50px;">
+                            @Html.DropDownListFor(model => m.Konum, new SelectList(Model[0].Konumlar, "Value", "Text"), "Konum Seçiniz", new { @class = "form-control", style = "max-width:260px;", required = "required", id = "YeniMasaSelect", name = "Konum" })
+                            <a href="#toggle-formkonum" data-toggle="collapse" class="btn yeniKonumbtn"><i class="fa-regular fa-plus"></i></a>
+                        </div>
+
+                        <div id="toggle-formkonum" class="collapse form-group YeniKonumDivModal" aria-expanded="false">
+                            <div class="col d-flex justify-content-center align-items-center">
+                                <label class="zip-label">Yeni Konum</label>
+                            </div>
+                            <input type="text" name="name" value="" placeholder="Yeni Konum girin" tabindex="1" id="YeniKonum" required>
+                        </div>
+
+                        <div class="form-group col-12 d-flex justify-content-center align-items-center mb-0">
+                            <button type="submit" class="btn btn-success w-100" style="max-width:260px;">Kaydet</button>
+                        </div>
+                    }
+                </div>
+
+
+                @*<form id="masaForm" method="post" action="...">
+                        @Html.ValidationSummary(true)
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => masaa.MasaAd)
+                            @Html.EditorFor(model => masaa.MasaAd)
+                            @Html.ValidationMessageFor(model => masaa.MasaAd)
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => masaa.Kapasite)
+                            @Html.EditorFor(model => masaa.Kapasite)
+                            @Html.ValidationMessageFor(model => masaa.Kapasite)
+                        </div>
+
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => masaa.Konum)
+                            @Html.EditorFor(model => masaa.Konum)
+                            @Html.ValidationMessageFor(model => masaa.Konum)
+                        </div>
+
+                        <button type="submit">Gönder</button>
+                    </form>*@
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#MasaEkleForm').validate({
+            errorPlacement: function (error, element) {
+
+            }
+        });
+
+
+</script>

@@ -1,0 +1,66 @@
+﻿
+@model List<RMS.Models.Masalar>
+@{
+    ViewBag.Title = "Anasayfa";
+
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+
+}
+
+
+<div class="mb-3">
+
+    <select class="form-control " id="konumSecimi" onchange="Filtrele()" style="width:200px;">
+        <option value="TumKonumlar">Tüm Konumlar</option>
+        @{
+            HashSet<string> eklenenKonumlar = new HashSet<string>();
+        }
+        @foreach (var masakonum in Model)
+        {
+            if (!eklenenKonumlar.Contains(masakonum.Konum))
+            {
+                <option value="@masakonum.Konum">@masakonum.Konum</option>
+                eklenenKonumlar.Add(masakonum.Konum);
+            }
+        }
+
+    </select>
+</div>
+
+<!-- Masalar -->
+<div class="d-flex row" id="masaAlani">
+    @foreach (var masa in Model)
+    {
+        String durum = "danger";
+        if (masa.Durum != "Dolu")
+        {
+            durum = "success";
+        }
+
+        <div class="col-xl-3 col-md-6 mb-4 masa-konum @(masa.Konum)">
+            <div class="card border-left-@durum shadow h-100 py-2 col btn" id="@masa.MasaId">
+                <div class="card-body col">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2 text-left">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                @masa.MasaAd
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="durumText">@masa.Durum</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chair fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <select class="form-control w-50 float-right" id="durumDropdown" onchange="DurumuDegistir(@masa.MasaId, this.value)">
+                            <option value="Dolu" @(masa.Durum == "Dolu" ? "selected" : "")>Dolu</option>
+                            <option value="Boş" @(masa.Durum == "Boş" ? "selected" : "")>Boş</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/tZ1a9JJlM9V7U6P9dz5y9D5Lk/6+Z/hRTt8iI=" crossorigin="anonymous"></script>
+<script src="~/Content/PagesContent/Home/Home/home.js"></script>

@@ -1,0 +1,56 @@
+﻿@model RMS.Models.Menu
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="container d-flex align-items-center justify-content-center " style="height:100vh;">
+
+
+
+    <div class="row card border-0 p-4 border shadow " style="background-color: white; width: 350px;">
+
+
+
+        <h4 class="card-title text-center">Silmek istediğine emin misin?</h4>
+
+        <hr />
+        <div class="form-horizontal card-body d-block justify-content-center">
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.YemekAd)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.YemekAd)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.YemekFiyat)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.YemekFiyat)
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Sil" class="btn btn-danger" />
+
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+
+

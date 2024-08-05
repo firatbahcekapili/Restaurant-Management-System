@@ -1,0 +1,23 @@
+﻿
+@{
+    Layout = "~/Views/Shared/justbootstrap.cshtml";
+    ViewBag.Title = "ErisimYok";
+}
+
+
+
+
+<div class="container">
+  
+    <div class="position-relative col-md-12  text-center" style="height:780px">
+
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <h2>Bu sayfaya erişiminiz bulunmamaktadır. Lütfen giriş yapıp tekrar deneyin</h2>
+            <h2>Giriş yapmak için</h2>
+            @Html.ActionLink("Giriş Yap", "Giris", "Giris")
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,115 @@
+﻿@model RMS.Models.Menu
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+
+
+
+<div class="container d-flex align-items-center justify-content-center " style="height:100vh;">
+
+
+
+    <div class="row container d-block card border-0 p-4 border shadow " style="background-color: white; width: 350px;">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+
+            <h4 class="card-title text-center">Menü</h4>
+            <hr />
+            <div class="form-horizontal card-body d-block justify-content-center">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YemekAd, htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.YemekAd, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.YemekAd, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YemekKategori, htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+
+                        @Html.ValidationMessageFor(model => model.YemekKategori, "", new { @class = "text-danger" })
+
+                        @Html.DropDownListFor(model => model.YemekKategori, Model.Kategoriler, htmlAttributes: new { @class = "form-control form-select dropKategori", id = "Kategori" })
+
+                        <div class="mt-3 mb-1" id="newKategoriInput" style="display: none;">
+                            <input type="text" id="nkategori" name="nKategori" class="form-control" placeholder="Yeni Kategori Adı" />
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YemekResim, htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.YemekResim, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.YemekResim, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YemekFiyat, htmlAttributes: new { @class = "control-label col" })
+                    <div class="col">
+                        @Html.EditorFor(model => model.YemekFiyat, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.YemekFiyat, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col">
+                        <input type="submit" value="Kaydet" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.6.4.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".dropKategori").change(function () {
+            if ($(this).val() == "Yeni Kategori Ekle") {
+                $("#newKategoriInput").slideDown("fast");
+                var dropdown = document.getElementById("Kategori");
+                dropdown.setAttribute("name", "K");
+
+                var newkategori = document.getElementById("nkategori");
+                newkategori.setAttribute("name", "YemekKategori");
+            } else {
+                $("#newKategoriInput").slideUp("fast");
+                var newkategori = document.getElementById("nkategori");
+                newkategori.setAttribute("name", "nkategori");
+
+                var dropdown = document.getElementById("Kategori");
+                dropdown.setAttribute("name", "YemekKategori");
+            }
+        });
+    });
+</script>

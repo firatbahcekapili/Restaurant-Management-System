@@ -1,0 +1,1083 @@
+﻿@model RMS.Models.MasaViewModel
+@{
+    ViewBag.Title = "Masa";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<script src="~/Scripts/jquery-3.6.4.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+
+<link href="~/Content/style.css" rel="stylesheet" />
+<link href="~/Content/Dynamic-Text.css" rel="stylesheet" />
+<link href="~/Content/Modal.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="~/Content/PagesContent/Home/Masa/masa.css" rel="stylesheet" />
+
+
+
+
+<div class="sizeanimation bg-dark"></div>
+
+
+<div class="ml-0 mr-0 pt-md-4 pb-md-4   d-block">
+
+    <div class="row   shadow  d-flex   " style="border-radius:2rem ; height:85vh">
+
+
+
+
+
+
+        <div class="col-xl-1 col-md-2 col-sm-3 col-3 bg-gradient-secondary h-100   " style="border-start-start-radius: 2rem; border-end-start-radius: 2rem;">
+
+
+            <div class="nav-tab-div p-0 h-100 d-flex align-items-center">
+
+                <div class="multi-button  w-100">
+                    <div id="btn" class="mb-3 btn d-flex align-items-center justify-content-center text-responsive text-center" onclick="document.getElementById('modal-tasi').showModal();"><span>Masa Taşı</span> </div>
+
+
+
+                    <div id="btn" class="d-flex  align-items-center justify-content-center text-responsive text-center" onclick="BiFiltre();"> <span>Masa Birleştir</span> </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        @{
+            HashSet<string> eklenenKonumlar = new HashSet<string>();
+        }
+
+        <dialog id="modal-tasi" class="">
+            <div class="row">
+                <div class="col text-center">
+                    <h2>Taşımak İstediğiniz Masayı Seçiniz</h2>
+                </div>
+
+            </div>
+
+            <div class="row d-flex justify-content-center mb-2">
+                <select class="form-control w-75 konumSecimi" id="konumSecimi" onchange="Filtrele('modal-tasi')">
+                    <option value="TumKonumlar">Tüm Konumlar</option>
+
+                    @foreach (var item in Model.Masalar[0].Konumlar)
+                    {
+                        <option value="@item.Value">@item.Value</option>
+
+                    }
+
+
+
+
+                </select>
+            </div>
+            <div class="row ">
+
+
+                <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" id="MasaTasi" style="max-height:300px">
+
+
+
+
+                    @Html.Action("MasaListesi")
+                </div>
+
+            </div>
+
+            <button onclick="document.getElementById('modal-tasi').close();" aria-label="close" class="x">❌</button>
+        </dialog>
+
+
+        <dialog id="modal-birlestir">
+
+
+            <div class="row">
+                <div class="col text-center">
+                    <h2>Birleştirmek İstediğiniz Masayı Seçiniz</h2>
+                </div>
+
+            </div>
+
+            <div class="row d-flex justify-content-center mb-2">
+                <select class="form-control w-75 konumSecimi" id="konumSecimi" onchange="Filtrele('modal-birlestir')">
+                    <option value="TumKonumlar">Tüm Konumlar</option>
+                    @foreach (var item in Model.Masalar[0].Konumlar)
+                    {
+                        <option value="@item.Value">@item.Value</option>
+
+                    }
+
+                </select>
+            </div>
+            <div class="row ">
+
+
+                <div class="col row d-flex justify-content-center m-0 overflow-y-scroll" id="MasaBirlestir" style="max-height:300px">
+
+                    @Html.Action("MasaListesi")
+                </div>
+
+            </div>
+            <button id="birlestirClose" onclick="document.getElementById('modal-birlestir').close();" aria-label="close" class="x">❌</button>
+
+
+        </dialog>
+
+
+
+        <!-- Adisyon Paneli -->
+        <div class="col-xl-4 col-md-10 col-sm-9 col-9 bg-white h-100 p-0">
+            <div class="h-100 w-100 col shadow">
+                <!-- Adisyon paneli -->
+                <div class="row border-bottom-light d-flex align-items-center" style="height:10%">
+
+
+
+
+                    <div class="col-6 col-lg-5  ">
+                        <div class="text-danger h5 m-0 pl-4">
+                            <strong>
+                                @Model.Masalar[0].MasaAd
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-6 text-light">
+                        <div class="bg-gradient-dark rounded-1 d-flex justify-content-center align-items-center pl-4 pr-4 text-truncate dynamic-text float-right" style="max-width:200px">
+                            @if (Model.Personeller != null)
+                            {
+
+                                var resimUrl = Session["Resim"] != null ? Session["Resim"].ToString() : null;
+
+                                if (resimUrl != null)
+                                {
+                                    <img class="img-profile rounded-circle mr-1" src="@resimUrl" style="height:30px;">
+                                }
+                                @(Model.Personeller[0].Ad + " " + @Model.Personeller[0].Soyad)
+                            }
+                            else if (Model.Adminler != null)
+                            {
+                                var resimUrl = Session["Resim"] != null ? Session["Resim"].ToString() : null;
+
+                                if (resimUrl != null)
+                                {
+                                    <img class="img-profile rounded-circle mr-1" src="@resimUrl" style="height:30px;">
+                                }
+
+                                @(Model.Adminler[0].Ad+ " " + @Model.Adminler[0].Soyad)
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row border-bottom-light" style="height:80%">
+                   
+
+
+                    <div id="adisyon-panel " class="vw-100" name="adisyon-panel" style="height:-webkit-fill-available;">
+                        <ul class="list-group   " id="partialContainer" style="overflow-y: auto; height: inherit; ">
+
+                            @Html.Action("Adisyony", Model.Masalar[0].MasaId)
+
+                        </ul>
+
+
+                    </div>
+                </div>
+                <div class="row d-flex align-items-center  p-4" style="height:10%">
+                    <div class="mr-4 d-flex">
+
+                        <div class="mr-1">Toplam Adisyon:</div>
+                        <div id="ToplamFiyat"> </div>
+                    </div>
+
+                    <a class="btn btn-outline-success " onclick="OdeModal()" href="#" data-toggle="modal" data-target="#odeModal">Öde</a>
+
+                </div>
+            </div>
+        </div>
+
+        <dialog id="odeModal">
+
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabeal">Ödeme işlemi</h5>
+
+            </div>
+            <div class="modal-body">
+                Ödeme işlemine devam etmek istiyorsanız aşağıdaki öde butonuna basınız. Masa durumu boş olarak değiştirilecektir
+                <div>Masa adisyon toplam tutar: <span id="modalTutar"></span>  </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="ode" type="button" data-dismiss="modal">Öde</button>
+                <button class="btn btn-secondary" type="button" onclick="document.getElementById('odeModal').close();">İptal</button>
+            </div>
+            <button id="odeModalClose" onclick="document.getElementById('odeModal').close();" aria-label="close" class="x">❌</button>
+
+
+        </dialog>
+
+
+
+        <!-- Menü Paneli -->
+        <div class="col-xl-6 col-md-10  col-sm-9 col-8 bg-light h-100  " id="menu">
+
+
+            <!-- Tab panes -->
+            <div class="tab-content tabs h-100 " style="overflow-y:auto;">
+                @foreach (var kategori in Model.Menu.Select(m => m.YemekKategori).Distinct().ToList())
+                {
+                    <div class="tab-pane mt-4  w-100 row  " role="tabpanel" id="Section-@kategori.Replace(" ", "")" aria-selected="true">
+
+
+
+
+
+                        @foreach (var yemek in Model.Menu)
+                        {
+
+
+                            if (yemek.YemekKategori == kategori)
+                            {
+
+
+
+                                <div class="col-xl-4 col-md-6 mb-4 float-left d-block ">
+
+                                    <a href="#collapseEX@(yemek.YemekId)" class="add-to-order selectable" data-yemekad="@yemek.YemekAd" data-yemekfiyat="@yemek.YemekFiyat" aria-selected="true" data-bs-toggle="collapse">
+                                        <div class="card food-card border-left-primary shadow h-100 py-2" style="max-height:100px;">
+                                            <div class="image">
+                                                <img id="imgr" class="imgr" src="@yemek.YemekResim" />
+                                            </div>
+                                            <div class="card-body" id="card-body">
+                                                <div class="row card-row no-gutters align-items-center">
+                                                    <div class="col mr-2" style="height:100px">
+                                                        <div class="text-xs font-weight-bold   text-uppercase mb-1" style=" ">
+                                                            <span class="badge badge-light rounded-5 text-primary " style="font-size: 12px; background-color: #f8f9fab8;">@yemek.YemekAd</span>
+                                                        </div>
+                                                        <div class="h5 mb-0 font-weight-bold text-dark">
+                                                            <span class="badge badge-light rounded-5" style="font-size:12px">@yemek.YemekFiyat &#8378;</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto pr-4" style="width:1vw;height:100px"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                    @{
+                                        var s = Model.Siparisler.Where(x => x.YemekAd == yemek.YemekAd && x.Durum == "Aktif").Sum(x => x.Adet);
+                                    }
+                                    <div class="collapse" id="collapseEX@(yemek.YemekId)">
+                                        <div class="card card-body">
+                                            <div class="col d-flex justify-content-center p-0 ">
+                                                <div class=" w-100 d-flex justify-content-center " style=" overflow-y: auto;overflow-x: hidden;">
+                                                    <div class="row w-100">
+
+                                                        <div class="col-12 d-flex ">
+                                                            <input class="form-control" type="number" id="adet-Input-@yemek.YemekId" style="width:inherit; font-size:75%;" min="1" placeholder="Adet değeri girebilirsiniz.">
+                                                            <span class="input-group-btn" onclick="">
+                                                                <button class="btn btn-default btn-sm" onclick="MenuUp(@yemek.YemekId,'@yemek.YemekAd.Replace(" ","")');" data-dir="up"><i class="fas fa-plus "></i></button>
+                                                            </span>
+                                                        </div>
+
+                                                        @if (yemek != null && !string.IsNullOrEmpty(yemek.KatalogIdler))
+
+                                                        {
+
+
+                                                            var yemekKataloglar = yemek.KatalogIdler.Split(',');
+
+                                                            <div class="col-12">
+
+
+                                                                @foreach (var KatalogId in yemekKataloglar)
+                                                                {
+
+                                                                    String KatalogAd = Model.YemekKatalog.Find(y => y.KatalogId == int.Parse(KatalogId)).KatalogAd;
+
+
+                                                                    <label for="@KatalogAd.Replace(" ","")@yemek.YemekAd">@KatalogAd</label>
+
+                                                                    var list = Model.Katalog_Ozellikler.Where(ko => ko.KatalogId == int.Parse(KatalogId)).Select(ko => ko.YemekOzellik).ToList();
+
+                                                                    <select class="label ui selection fluid dropdown   select-@yemek.YemekId" id="@KatalogAd.Replace(" ","")@yemek.YemekAd" katalogad="@KatalogAd" @(Model.YemekKatalog.FirstOrDefault(x => x.KatalogId == int.Parse(KatalogId)).CokluSecim == true ? "multiple" : "")>
+                                                                        <option value="">Seçim Yapabilirsiniz</option>
+                                                                        @foreach (var item in list)
+                                                                        {
+                                                                            <option value="@item.Yemek_Ozellik">@item.Yemek_Ozellik</option>
+                                                                        }
+                                                                    </select>
+
+
+
+
+
+
+                                                                }
+
+                                                            </div>
+
+
+
+
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @{
+                                        s = 0;
+                                    }
+
+
+                                </div>
+
+                            }
+
+
+                        }
+
+
+                    </div>
+                }
+
+            </div>
+        </div>
+
+
+        <!-- Kategori Paneli -->
+        <div class="col-xl-1 col-md-2 col-sm-3 col-4  bg-light h-100 tab p-0" style="border-start-end-radius: 2rem; border-end-end-radius: 2rem;">
+            <!-- Nav tabs -->
+            <div class="nav-tab-div p-0 h-100 d-flex align-items-center">
+                <ul class="nav nav-tabs d-block w-100 h-75  d-flex align-items-center justify-content-center  ">
+                    <li class="nav-item">
+
+
+                        @foreach (var kategori in Model.Menu.Select(m => m.YemekKategori).Distinct().ToList())
+                        {
+
+                            <a class="nav-link " href="#Section-@kategori.Replace(" ", "")" data-toggle="tab" aria-selected="true"> @kategori   </a>
+
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+    @{
+        var masaId = @Model.Masalar.ToList().ToString();
+
+    }
+
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+<script src="~/Scripts/main.js"></script>
+<script src="~/Scripts/popper.js"></script>
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+<script src="~/Content/PagesContent/Home/Masa/masa.js"></script>
+
+<script>
+
+
+
+var removedElements = document.querySelectorAll("#MasaTasi .modallink");
+
+function BiFiltre() {
+    var masalar = document.querySelectorAll("#MasaBirlestir .modallink");
+
+    var removedElements = Array.from(masalar);
+
+    for (var i = 0; i < masalar.length; i++) {
+        if (masalar[i].parentElement.id == 'MasaBirlestir') {
+            if (!(masalar[i].classList.contains("dolu"))) {
+                // Eğer disabled sınıfı içermiyorsa, elementi kaldır
+                removedElements.push(masalar[i]);
+                masalar[i].remove();
+            } else {
+                if (masalar[i].getAttribute("masaid") == @Model.Masalar[0].MasaId) {
+                    // Eğer masa ID'si uyuyorsa, elementi kaldır
+                    removedElements.push(masalar[i]);
+                    masalar[i].remove();
+                }
+
+                // Elementin üzerindeki sınıfları temizle
+                masalar[i].classList.remove("disabled", "bg-danger");
+            }
+        }
+    }
+
+
+    document.getElementById('modal-birlestir').showModal();
+}
+
+
+
+
+
+
+function Tikla(element, id) {
+
+    var parentDiv = element.parentElement;
+    var parentId = parentDiv.id;
+
+    if (parentId == 'MasaTasi') {
+
+        MasaTasi(id);
+    } else {
+        MasaBirlestir(id);
+
+    }
+
+
+}
+
+
+function MasaBirlestir(id) {
+
+
+
+    $.ajax({
+        url: '/Home/MasaBirlestir',
+        type: 'POST',
+        data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
+        success: function (result) {
+
+            window.location.href = '/Home/Masa/' + id;
+
+        },
+        error: function () {
+
+        }
+    });
+
+
+}
+
+function MasaTasi(id) {
+
+
+
+    $.ajax({
+        url: '/Home/MasaTasi',
+        type: 'POST',
+        data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
+        success: function (result) {
+
+            window.location.href = '/Home/Masa/' + id;
+
+        },
+        error: function () {
+
+        }
+    });
+
+
+}
+
+$(document).ready(function () {
+    $.get('@Url.Action("AdisyonGetir", "Home")', { masaId: @Model.Masalar[0].MasaId }, function (data) {
+        $('#partialContainer').html(data);
+    });
+    document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+});
+
+// Tüm hovered-element ve target-elementleri seçin
+const hoveredElements = document.querySelectorAll('.card-row');
+const targetElements = document.querySelectorAll('.imgr');
+
+// Her hovered-element için işlemi tanımlayın
+hoveredElements.forEach((hoveredElement, index) => {
+    hoveredElement.addEventListener('mouseenter', () => {
+        // Hover yapıldığında aynı indeksteki target-elementin grayscale efektini değiştirin
+        targetElements[index].style.transform = 'scale(1.2)';
+        targetElements[index].style.filter = 'grayscale(0%)';
+    });
+
+    hoveredElement.addEventListener('mouseleave', () => {
+        // Fare imleci hoverdan çıkınca aynı indeksteki target-elementin grayscale efektini eski haline getirin
+        targetElements[index].style.transform = 'scale(1)';
+        targetElements[index].style.filter = 'grayscale(100%)';
+    });
+});
+
+var elements = document.querySelectorAll(".selectable");
+elements.forEach(function (element) {
+    element.addEventListener("click", function (event) {
+        if (!element.classList.contains("selected")) {
+            element.classList.add("selected");
+            elements.forEach(function (a) {
+                if (a != element) {
+                    a.classList.remove("selected");
+                    var collapseElements = document.querySelectorAll(".collapse.show");
+                    collapseElements.forEach(function (collapse) {
+                        // Collapse öğesine tıklanmadıysa kapat
+                        if (!collapse.contains(event.target.closest(".delete.icon"))) {
+                            collapse.classList.remove("show");
+                            var yemekad = element.getAttribute("data-yemekad").replace(" ", "");
+                            var adetInput = document.getElementById("adet-Input" + yemekad);
+                            adetInput.value = "";
+                        }
+                    });
+                }
+            });
+        } else {
+            element.classList.remove("selected");
+        }
+    });
+});
+
+document.addEventListener("click", function (event) {
+    if (!event.target.closest(".selectable")) {
+        var collapseElements = document.querySelectorAll(".collapse.show");
+        collapseElements.forEach(function (collapse) {
+            if (!collapse.contains(event.target) && !event.target.closest(".delete.icon")) {
+                elements.forEach(function (item) {
+                    item.classList.remove("selected");
+                    collapse.classList.remove("show");
+                    var selectable = document.querySelectorAll(".selectable");
+                    selectable.forEach(function (sElement) {
+                        var yemekad = sElement.getAttribute("data-yemekad").replace(" ", "");
+                        var adetInput = document.getElementById("adet-Input" + yemekad);
+                        adetInput.value = "";
+                    });
+                });
+            }
+        });
+    }
+});
+
+
+
+
+
+var selectedItemsValue = [];
+function alAdetDegeri(yemekAd) {
+    var inputElement = document.getElementById("adetInput" + yemekAd);
+
+    var adetDegeri = inputElement.value;
+
+    console.log("Yemek Adı: " + yemekAd + ", Adet Değeri: " + adetDegeri);
+}
+
+
+
+//--------------------------------------------------------
+
+
+var ilkDegerler = [];
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    var toplam = document.getElementById("toplam").getAttribute("adet");
+    for (var i = 0; i < toplam; i++) {
+
+        ilkDegerler[i] = document.querySelector(".adisyon-adet-" + i + 1).value;
+
+    }
+
+});
+
+
+
+//--------------------------------------------------------
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var gonderButton = document.getElementById("gonder");
+    gonderButton.addEventListener("click", function () {
+
+        var yemekAdlari = [];
+        var yemekAdeti = [];
+        selectedItems.forEach(function (item) {
+            yemekAdlari.push(item.getAttribute("data-yemekad"));
+        });
+
+
+        for (var i = 0; i < yemekAdlari.length; i++) {
+            yemekadi = yemekAdlari[i];
+
+            alAdetDegeri(yemekadi.replace(" ", ""))
+            var inputElement = document.getElementById("adetInput" + yemekadi.replace(" ", ""));
+
+
+            var adetDegeri = inputElement.value;
+            yemekAdeti.push(adetDegeri);
+        }
+
+
+        /*//----------------------------------------------------//*/
+
+
+        var adisyonYemekAd = [];
+        var adisyonYemekAdet = [];
+        var toplam = document.getElementById("toplam").getAttribute("adet");
+
+
+        for (var c = 1; c <= parseInt(toplam); c++) {
+            var adisyonElement = document.getElementById(c);
+            var yemekAd = adisyonElement.getAttribute("yemekad");
+            var adisyonAdet = document.querySelector(".adisyon-adet-" + c).value;
+            adisyonYemekAd.push(yemekAd);
+            adisyonYemekAdet.push(adisyonAdet);
+
+            console.log(yemekAd + " " + adisyonAdet);
+        }
+
+        for (var i = 0; i < adisyonYemekAd.length; i++) {
+
+
+            if (yemekAdlari.find(x => x == adisyonYemekAd[i]) != undefined) {
+
+
+                if (adisyonYemekAdet[i] > yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] + ilkDegerler[i]) {
+
+                    //yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] = 0;
+                }
+
+            }
+
+
+        }
+
+
+
+
+
+
+        $.ajax({
+            url: "/Home/AdisyonGuncelle",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            cache: false, 
+            data: JSON.stringify({ Veri: adisyonYemekAd, adet: adisyonYemekAdet, id: @Model.Masalar[0].MasaId }),
+            success: function (result) {
+                if (result.success) {
+                    var s_AdisyonPartia = result.AdisyonPartial;
+
+                } else {
+                    console.error("Adisyon güncelleme başarısız oldu.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX isteği başarısız oldu. Durum kodu: " + xhr.status);
+            }
+        });
+
+
+        /*//----------------------------------------------------//*/
+
+
+
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Home/Adisyon", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+
+
+
+
+
+        var data = JSON.stringify({ Veri: yemekAdlari, adet: yemekAdeti, id: @Model.Masalar[0].MasaId });
+
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                document.getElementById("partialContainer").innerHTML = response;
+
+
+
+                //gönder butonuna basıldıktan sonra seçili elementlerin sıfırlanma işlemi
+
+                var selectableElements = document.querySelectorAll(".selectable");
+                var collapseElements = document.querySelectorAll(".collapse");
+                var adetElements = document.querySelectorAll(".adet");
+
+                selectableElements.forEach(function (element) {
+                    element.classList.remove("selected");
+
+
+                });
+                adetElements.forEach(function (element) {
+                    element.value = 0;
+
+
+                });
+                collapseElements.forEach(function (element) {
+                    element.classList.remove("show");
+
+
+                });
+
+                selectedItems = [];
+
+                for (var i = 0; i < yemekAdeti.length; i++) {
+                    ilkDegerler[i] = yemekAdeti[i];
+                }
+
+
+
+            }
+        };
+    });
+});
+
+
+
+
+function up(sira) {
+
+
+    var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
+    var deger = parseInt(document.querySelector(".adisyon-adet-" + sira).value);
+    var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
+    deger++;
+
+    var ozellikler = [];
+    $('#collapse-' + sira + ' span').each(function () {
+        ozellikler.push($(this).text());
+    });
+    console.log(ozellikler);
+
+
+    console.log('Arttırma');
+    console.log('güncel değer:' + deger);
+    console.log('eski değer:' + eskideger);
+    $.ajax({
+        url: '/Home/Adisyon',
+        data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
+        type: 'POST',
+        success: function (result) {
+
+            document.getElementById("partialContainer").innerHTML = result;
+            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+
+
+
+}
+
+
+function down(sira) {
+
+
+    var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
+    var inputElement = document.querySelector(".adisyon-adet-" + sira);
+    var deger = parseInt(inputElement.value);
+    var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
+    var ozellikler = [];
+    $('#collapse-' + sira + ' span').each(function () {
+        ozellikler.push($(this).text());
+    });
+    console.log(ozellikler);
+
+    deger--;
+    inputElement.value = deger;
+
+    console.log('Azaltma');
+    console.log('güncel değer:' + deger);
+    console.log('eski değer:' + eskideger);
+    $.ajax({
+        url: '/Home/Adisyon',
+        data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
+        type: 'POST',
+        success: function (result) {
+
+            document.getElementById("partialContainer").innerHTML = result;
+            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+
+
+
+}
+
+
+function MenuUp(yemekid, yemekad) {
+
+
+
+
+
+    var deger = parseInt(document.querySelector("#adet-Input-" + yemekid).value);
+
+    if (!isNaN(deger) && deger >= 1) {
+
+    } else {
+        deger = 1;
+    }
+
+
+
+
+    console.log('Arttırma');
+    console.log('güncel değer:' + deger
+
+    var selects = document.querySelectorAll(".select-" + yemekid);
+
+    var selectedValues = {};
+
+    selects.forEach(function (selectBox) {
+        /*            var selectLabel = selectBox.labels[0].textContent.trim();*/
+        var selectelement = selectBox.querySelector("select");
+        var selectLabel = selectelement.getAttribute("katalogad");
+
+
+
+        var selectedOptions = [];
+        var options = selectelement && selectelement.options;
+        if (options) {
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].selected) {
+                    selectedOptions.push(options[i].value);
+                }
+            }
+        }
+        if (selectedOptions.length > 0) {
+            selectedValues[selectLabel] = selectedOptions;
+        }
+    });
+
+
+
+    var jsonData = JSON.stringify(selectedValues);
+
+    console.log(jsonData);
+
+    $.ajax({
+        url: '/Home/Adisyon',
+        data: { YemekId: yemekid, adet: deger, id: @Model.Masalar[0].MasaId, YemekOzellikJson: jsonData, Ozellikler: null },
+        type: 'POST',
+        success: function (result) {
+
+            document.getElementById("partialContainer").innerHTML = result;
+            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+
+            var adetInput = document.getElementById("adet-Input" + yemekad);
+            /* adetInput.value = "";*/
+
+
+            var select = document.querySelectorAll(".select-" + ymek);
+
+            select.forEach(function (s) {
+
+                var a = s.querySelectorAll("a i");
+
+                a.forEach(function (aElement) {
+                    console.log(aElement);
+                    aElement.click();
+                });
+
+            });
+
+
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+
+
+}
+function MenuDown(id, yemekad) {
+
+    var deger = parseInt(document.querySelector("#adetInput" + yemekad.replace(" ", "")).value);
+
+    console.log(yemekad + " " + id);
+
+    console.log('Arttırma');
+    console.log('güncel değer:' + deger);
+
+    $.ajax({
+        url: '/Home/Adisyon',
+        data: { Veri: yemekad, adet: deger, id: @Model.Masalar[0].MasaId, YemekOzellikJson: jsonData },
+        type: 'POST',
+        success: function (result) {
+
+            document.getElementById("partialContainer").innerHTML = result;
+            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+            var selectableElements = document.querySelectorAll(".selectable");
+            var collapseElements = document.querySelectorAll(".collapse");
+            var adetElements = document.querySelectorAll(".adet");
+
+            selectableElements.forEach(function (element) {
+                element.classList.remove("selected");
+
+
+            });
+            adetElements.forEach(function (element) {
+                element.value = 0;
+
+
+            });
+            collapseElements.forEach(function (element) {
+                element.classList.remove("show");
+
+
+            });
+
+
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+
+}
+
+
+
+function OdeModal() {
+    $("#modalTutar").text($("#ToplamFiyat").text());
+    document.getElementById('odeModal').showModal();
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var odeButton = document.getElementById("ode");
+    odeButton.addEventListener("click", function () {
+
+
+
+
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Home/Ode", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        var data = JSON.stringify({ id: @Model.Masalar[0].MasaId });
+
+
+        xhr.send(data);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+
+                    var result = xhr.responseText; 
+
+                    console.log(result);
+
+
+                    location.reload();
+                } else {
+
+                    console.error("İstek başarısız oldu. Durum kodu: " + xhr.status);
+                }
+            }
+        };
+
+
+    })
+});
+
+
+$(document).on('click', '.number-spinner button', function () {
+    var btn = $(this),
+        input = btn.closest('.number-spinner').find('input'),
+        oldValue = parseInt(input.val().trim()),
+        newVal = 0;
+
+    if (btn.attr('data-dir') == 'up') {
+        newVal = oldValue + 1;
+    } else {
+        // Eğer eski değer 0'dan büyükse azalt, aksi takdirde değeri 0 yap
+        newVal = oldValue > 0 ? oldValue - 1 : 0;
+    }
+
+    input.val(newVal);
+    input.value = newVal;
+});
+
+    function Filtrele(dialogId) {
+
+    var secilenKonum = document.getElementById(dialogId).querySelector(".konumSecimi").value;
+
+    // Tüm masaları gizle
+    var masalar = document.getElementById(dialogId).getElementsByClassName("modallink");
+    for (var i = 0; i < masalar.length; i++) {
+        masalar[i].classList.remove("d-flex");
+        masalar[i].style.display = "none";
+    }
+
+    // Seçilen konuma ait masaları göster
+    if (secilenKonum !== "TumKonumlar") {
+        var secilenMasalar = document.getElementById(dialogId).getElementsByClassName(secilenKonum);
+        for (var j = 0; j < secilenMasalar.length; j++) {
+            secilenMasalar[j].classList.add("d-flex");
+            secilenMasalar[j].style.display = "block";
+        }
+    } else {
+        // Eğer "Tüm Konumlar" seçildiyse tüm masaları göster
+        for (var k = 0; k < masalar.length; k++) {
+            masalar[k].style.display = "block";
+        }
+    }
+}
+
+
+$(document).on('click', '.btn-collapse', function () {
+
+    var btn = $(this);
+    var icon = btn.closest('.card-header').find('.icon-place i');
+    if (btn.attr('aria-expanded') == 'true') {
+
+
+        $('.icon-place').find('i').animate({ rotate: '0deg' }, 'fast');
+        $('.icon-place').removeAttr("style");
+        icon.animate({ rotate: '180deg' }, 'fast');
+        icon.removeAttr("style");
+
+    } else {
+        icon.animate({ rotate: '0deg' }, 'fast');
+        icon.removeAttr("style");
+    }
+
+
+
+});
+$(document).on('click', function (event) {
+    if (!$(event.target).closest('.btn-collapse').length) {
+        $('.btn-collapse').each(function () {
+            var icon = $(this).closest('.card-header').find('.icon-place i');
+            icon.animate({ rotate: '0deg' }, 'fast');
+            icon.removeAttr("style");
+        });
+    }
+});
+
+
+</script>

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<RMS.Models.Masalar>
+@{
+    Layout = "~/Views/Shared/justbootstrap.cshtml";
+}
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container d-flex align-items-center justify-content-center " style="height:100vh;">
+
+    <div class=" row  ">
+
+        <div class="row border-0 p-4 border shadow " style="background-color: white; ">
+            <p>
+                @Html.ActionLink("Geri Dön", "onlyAdmin", "admin", "admin", new { @class = "btn btn-outline-success " })
+                @Html.ActionLink("Create New", "Create", "masalar", new { @class = "btn btn-outline-success " })
+            </p>
+
+
+            <table class="table">
+                <tr>
+                    <th>
+
+                        @Html.DisplayNameFor(model => model.MasaAd)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Kapasite)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Durum)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MasaAd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Kapasite)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Durum)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.MasaId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.MasaId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.MasaId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+
+        </div>
+    </div>
+    </div>
+
+
+
+
+            

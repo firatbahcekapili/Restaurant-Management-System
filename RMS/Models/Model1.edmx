@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Adminler">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Soyad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cinsiyet" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="aKullaniciAdi" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="aSifre" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Rol" Type="varchar" MaxLength="20" />
+          <Property Name="AdminResim" Type="varchar" MaxLength="100" />
+          <Property Name="Durum" Type="bit" />
+        </EntityType>
+        <EntityType Name="Katalog_Ozellik">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KatalogId" Type="int" Nullable="false" />
+          <Property Name="OzellikId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Masalar">
+          <Key>
+            <PropertyRef Name="MasaId" />
+          </Key>
+          <Property Name="MasaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasaAd" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Kapasite" Type="int" Nullable="false" />
+          <Property Name="Konum" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Durum" Type="varchar" MaxLength="20" />
+          <Property Name="DurumM" Type="bit" />
+        </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="YemekId" />
+          </Key>
+          <Property Name="YemekId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="YemekAd" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="YemekFiyat" Type="float" Nullable="false" />
+          <Property Name="YemekResim" Type="varchar" MaxLength="200" />
+          <Property Name="YemekKategori" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="KatalogIdler" Type="varchar" MaxLength="50" />
+          <Property Name="Durum" Type="bit" />
+        </EntityType>
+        <EntityType Name="Personeller">
+          <Key>
+            <PropertyRef Name="PersonelId" />
+          </Key>
+          <Property Name="PersonelId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ad" Type="varchar" MaxLength="50" />
+          <Property Name="Soyad" Type="varchar" MaxLength="50" />
+          <Property Name="Cinsiyet" Type="varchar" MaxLength="10" />
+          <Property Name="KullaniciAdi" Type="varchar" MaxLength="50" />
+          <Property Name="Sifre" Type="varchar" MaxLength="100" />
+          <Property Name="Rol" Type="varchar" MaxLength="20" />
+          <Property Name="PersonelResim" Type="varchar" MaxLength="100" />
+          <Property Name="Maaş" Type="float" />
+          <Property Name="Durum" Type="bit" />
+        </EntityType>
+        <EntityType Name="Siparisler">
+          <Key>
+            <PropertyRef Name="SiparisId" />
+          </Key>
+          <Property Name="SiparisId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdisyonId" Type="nvarchar" MaxLength="50" />
+          <Property Name="MasaId" Type="int" />
+          <Property Name="YemekId" Type="int" />
+          <Property Name="YemekAd" Type="nvarchar" MaxLength="255" />
+          <Property Name="Adet" Type="int" Nullable="false" />
+          <Property Name="YemekFiyat" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Tarih" Type="datetime" />
+          <Property Name="Durum" Type="nvarchar" MaxLength="50" />
+          <Property Name="PersonelId" Type="int" />
+          <Property Name="AdminId" Type="int" />
+          <Property Name="YemekOzellikJson" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="YemekKatalog">
+          <Key>
+            <PropertyRef Name="KatalogId" />
+          </Key>
+          <Property Name="KatalogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KatalogAd" Type="nvarchar" MaxLength="50" />
+          <Property Name="CokluSecim" Type="bit" />
+        </EntityType>
+        <EntityType Name="YemekOzellik">
+          <Key>
+            <PropertyRef Name="OzellikId" />
+          </Key>
+          <Property Name="OzellikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Yemek_Ozellik" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__Katalog_O__Katal__67DE6983">
+          <End Role="YemekKatalog" Type="Self.YemekKatalog" Multiplicity="1" />
+          <End Role="Katalog_Ozellik" Type="Self.Katalog_Ozellik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YemekKatalog">
+              <PropertyRef Name="KatalogId" />
+            </Principal>
+            <Dependent Role="Katalog_Ozellik">
+              <PropertyRef Name="KatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Katalog_O__Ozell__68D28DBC">
+          <End Role="YemekOzellik" Type="Self.YemekOzellik" Multiplicity="1" />
+          <End Role="Katalog_Ozellik" Type="Self.Katalog_Ozellik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YemekOzellik">
+              <PropertyRef Name="OzellikId" />
+            </Principal>
+            <Dependent Role="Katalog_Ozellik">
+              <PropertyRef Name="OzellikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparisler_Adminler">
+          <End Role="Adminler" Type="Self.Adminler" Multiplicity="0..1" />
+          <End Role="Siparisler" Type="Self.Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adminler">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparisler_Masalar">
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="0..1" />
+          <End Role="Siparisler" Type="Self.Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Masalar">
+              <PropertyRef Name="MasaId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="MasaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparisler_Menu1">
+          <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
+          <End Role="Siparisler" Type="Self.Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="YemekId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="YemekId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparisler_Personeller">
+          <End Role="Personeller" Type="Self.Personeller" Multiplicity="0..1" />
+          <End Role="Siparisler" Type="Self.Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personeller">
+              <PropertyRef Name="PersonelId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="PersonelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="RMSModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Adminler" EntityType="Self.Adminler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Katalog_Ozellik" EntityType="Self.Katalog_Ozellik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Masalar" EntityType="Self.Masalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Personeller" EntityType="Self.Personeller" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Siparisler" EntityType="Self.Siparisler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YemekKatalog" EntityType="Self.YemekKatalog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="YemekOzellik" EntityType="Self.YemekOzellik" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Katalog_O__Katal__67DE6983" Association="Self.FK__Katalog_O__Katal__67DE6983">
+            <End Role="YemekKatalog" EntitySet="YemekKatalog" />
+            <End Role="Katalog_Ozellik" EntitySet="Katalog_Ozellik" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Katalog_O__Ozell__68D28DBC" Association="Self.FK__Katalog_O__Ozell__68D28DBC">
+            <End Role="YemekOzellik" EntitySet="YemekOzellik" />
+            <End Role="Katalog_Ozellik" EntitySet="Katalog_Ozellik" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparisler_Adminler" Association="Self.FK_Siparisler_Adminler">
+            <End Role="Adminler" EntitySet="Adminler" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparisler_Masalar" Association="Self.FK_Siparisler_Masalar">
+            <End Role="Masalar" EntitySet="Masalar" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparisler_Menu1" Association="Self.FK_Siparisler_Menu1">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparisler_Personeller" Association="Self.FK_Siparisler_Personeller">
+            <End Role="Personeller" EntitySet="Personeller" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Adminler">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rol" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="aKullaniciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="aSifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AdminResim" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Cinsiyet" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Siparisler" Relationship="RMSModel.FK_Siparisler_Adminler" FromRole="Adminler" ToRole="Siparisler" />
+          <Property Name="Durum" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Masalar">
+          <Key>
+            <PropertyRef Name="MasaId" />
+          </Key>
+          <Property Name="MasaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasaAd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Kapasite" Type="Int32" Nullable="false" />
+          <Property Name="Durum" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Siparisler" Relationship="Self.FK__Siparisle__masa___3B75D760" FromRole="Masalar" ToRole="Siparisler" />
+          <Property Name="Konum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DurumM" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Personeller">
+          <Key>
+            <PropertyRef Name="PersonelId" />
+          </Key>
+          <Property Name="PersonelId" Type="Int32" Nullable="false" />
+          <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KullaniciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sifre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Rol" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="PersonelResim" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Cinsiyet" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Siparisler" Relationship="RMSModel.FK_Siparisler_Personeller" FromRole="Personeller" ToRole="Siparisler" />
+          <Property Name="Maaş" Type="Double" />
+          <Property Name="Durum" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Siparisler">
+          <Key>
+            <PropertyRef Name="SiparisId" />
+          </Key>
+          <Property Name="SiparisId" Type="Int32" Nullable="false" />
+          <Property Name="MasaId" Type="Int32" />
+          <Property Name="YemekId" Type="Int32" />
+          <Property Name="Tarih" Type="DateTime" Precision="3" />
+          <Property Name="Durum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Masalar" Relationship="Self.FK__Siparisle__masa___3B75D760" FromRole="Siparisler" ToRole="Masalar" />
+          <Property Name="YemekAd" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonelId" Type="Int32" />
+          <Property Name="AdminId" Type="Int32" />
+          <NavigationProperty Name="Adminler" Relationship="RMSModel.FK_Siparisler_Adminler" FromRole="Siparisler" ToRole="Adminler" />
+          <NavigationProperty Name="Personeller" Relationship="RMSModel.FK_Siparisler_Personeller" FromRole="Siparisler" ToRole="Personeller" />
+          <Property Name="YemekFiyat" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Adet" Type="Int32" Nullable="false" />
+          <Property Name="AdisyonId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YemekOzellikJson" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Menu" Relationship="RMSModel.FK_Siparisler_Menu1" FromRole="Siparisler" ToRole="Menu" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__Siparisle__masa___3B75D760">
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="0..1" />
+          <End Role="Siparisler" Type="Self.Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Masalar">
+              <PropertyRef Name="MasaId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="MasaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+          <EntitySet Name="Adminler" EntityType="Self.Adminler" />
+          <EntitySet Name="Masalar" EntityType="Self.Masalar" />
+          <EntitySet Name="Personeller" EntityType="Self.Personeller" />
+          <EntitySet Name="Siparisler" EntityType="Self.Siparisler" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK__Siparisle__masa___3B75D760" Association="Self.FK__Siparisle__masa___3B75D760">
+            <End Role="Masalar" EntitySet="Masalar" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(RMSModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(RMSModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <AssociationSet Name="FK_Siparisler_Adminler" Association="RMSModel.FK_Siparisler_Adminler">
+            <End Role="Adminler" EntitySet="Adminler" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparisler_Personeller" Association="RMSModel.FK_Siparisler_Personeller">
+            <End Role="Personeller" EntitySet="Personeller" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          <EntitySet Name="Katalog_Ozellik" EntityType="RMSModel.Katalog_Ozellik" />
+          <EntitySet Name="YemekKatalog" EntityType="RMSModel.YemekKatalog" />
+          <EntitySet Name="YemekOzellik" EntityType="RMSModel.YemekOzellik" />
+          <AssociationSet Name="FK__Katalog_O__Katal__67DE6983" Association="RMSModel.FK__Katalog_O__Katal__67DE6983">
+            <End Role="YemekKatalog" EntitySet="YemekKatalog" />
+            <End Role="Katalog_Ozellik" EntitySet="Katalog_Ozellik" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Katalog_O__Ozell__68D28DBC" Association="RMSModel.FK__Katalog_O__Ozell__68D28DBC">
+            <End Role="YemekOzellik" EntitySet="YemekOzellik" />
+            <End Role="Katalog_Ozellik" EntitySet="Katalog_Ozellik" />
+          </AssociationSet>
+          <EntitySet Name="Menu" EntityType="RMSModel.Menu" />
+          <AssociationSet Name="FK_Siparisler_Menu1" Association="RMSModel.FK_Siparisler_Menu1">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="Siparisler" EntitySet="Siparisler" />
+          </AssociationSet>
+          </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <Association Name="FK_Siparisler_Adminler">
+          <End Type="RMSModel.Adminler" Role="Adminler" Multiplicity="0..1" />
+          <End Type="RMSModel.Siparisler" Role="Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adminler">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparisler_Personeller">
+          <End Type="RMSModel.Personeller" Role="Personeller" Multiplicity="0..1" />
+          <End Type="RMSModel.Siparisler" Role="Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personeller">
+              <PropertyRef Name="PersonelId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="PersonelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Katalog_Ozellik">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KatalogId" Type="Int32" Nullable="false" />
+          <Property Name="OzellikId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="YemekKatalog" Relationship="RMSModel.FK__Katalog_O__Katal__67DE6983" FromRole="Katalog_Ozellik" ToRole="YemekKatalog" />
+          <NavigationProperty Name="YemekOzellik" Relationship="RMSModel.FK__Katalog_O__Ozell__68D28DBC" FromRole="Katalog_Ozellik" ToRole="YemekOzellik" />
+        </EntityType>
+        <EntityType Name="YemekKatalog">
+          <Key>
+            <PropertyRef Name="KatalogId" />
+          </Key>
+          <Property Name="KatalogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KatalogAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Katalog_Ozellik" Relationship="RMSModel.FK__Katalog_O__Katal__67DE6983" FromRole="YemekKatalog" ToRole="Katalog_Ozellik" />
+          <Property Name="CokluSecim" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="YemekOzellik">
+          <Key>
+            <PropertyRef Name="OzellikId" />
+          </Key>
+          <Property Name="OzellikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Yemek_Ozellik" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Katalog_Ozellik" Relationship="RMSModel.FK__Katalog_O__Ozell__68D28DBC" FromRole="YemekOzellik" ToRole="Katalog_Ozellik" />
+        </EntityType>
+        <Association Name="FK__Katalog_O__Katal__67DE6983">
+          <End Type="RMSModel.YemekKatalog" Role="YemekKatalog" Multiplicity="1" />
+          <End Type="RMSModel.Katalog_Ozellik" Role="Katalog_Ozellik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YemekKatalog">
+              <PropertyRef Name="KatalogId" />
+            </Principal>
+            <Dependent Role="Katalog_Ozellik">
+              <PropertyRef Name="KatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Katalog_O__Ozell__68D28DBC">
+          <End Type="RMSModel.YemekOzellik" Role="YemekOzellik" Multiplicity="1" />
+          <End Type="RMSModel.Katalog_Ozellik" Role="Katalog_Ozellik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="YemekOzellik">
+              <PropertyRef Name="OzellikId" />
+            </Principal>
+            <Dependent Role="Katalog_Ozellik">
+              <PropertyRef Name="OzellikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="YemekId" />
+          </Key>
+          <Property Name="YemekId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="YemekAd" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="YemekFiyat" Type="Double" Nullable="false" />
+          <Property Name="YemekResim" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="YemekKategori" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="KatalogIdler" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Siparisler" Relationship="RMSModel.FK_Siparisler_Menu1" FromRole="Menu" ToRole="Siparisler" />
+          <Property Name="Durum" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Siparisler_Menu1">
+          <End Type="RMSModel.Menu" Role="Menu" Multiplicity="0..1" />
+          <End Type="RMSModel.Siparisler" Role="Siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="YemekId" />
+            </Principal>
+            <Dependent Role="Siparisler">
+              <PropertyRef Name="YemekId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RMSModelStoreContainer" CdmEntityContainer="RMSEntities">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="RMSModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Adminler">
+            <EntityTypeMapping TypeName="RMSModel.Adminler">
+              <MappingFragment StoreEntitySet="Adminler">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Cinsiyet" ColumnName="Cinsiyet" />
+                <ScalarProperty Name="AdminResim" ColumnName="AdminResim" />
+                <ScalarProperty Name="aSifre" ColumnName="aSifre" />
+                <ScalarProperty Name="aKullaniciAdi" ColumnName="aKullaniciAdi" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Masalar">
+            <EntityTypeMapping TypeName="RMSModel.Masalar">
+              <MappingFragment StoreEntitySet="Masalar">
+                <ScalarProperty Name="DurumM" ColumnName="DurumM" />
+                <ScalarProperty Name="Konum" ColumnName="Konum" />
+                <ScalarProperty Name="MasaId" ColumnName="MasaId" />
+                <ScalarProperty Name="MasaAd" ColumnName="MasaAd" />
+                <ScalarProperty Name="Kapasite" ColumnName="Kapasite" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personeller">
+            <EntityTypeMapping TypeName="RMSModel.Personeller">
+              <MappingFragment StoreEntitySet="Personeller">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Maaş" ColumnName="Maaş" />
+                <ScalarProperty Name="Cinsiyet" ColumnName="Cinsiyet" />
+                <ScalarProperty Name="PersonelResim" ColumnName="PersonelResim" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="PersonelId" ColumnName="PersonelId" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Siparisler">
+            <EntityTypeMapping TypeName="RMSModel.Siparisler">
+              <MappingFragment StoreEntitySet="Siparisler">
+                <ScalarProperty Name="YemekOzellikJson" ColumnName="YemekOzellikJson" />
+                <ScalarProperty Name="AdisyonId" ColumnName="AdisyonId" />
+                <ScalarProperty Name="Adet" ColumnName="Adet" />
+                <ScalarProperty Name="YemekFiyat" ColumnName="YemekFiyat" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="PersonelId" ColumnName="PersonelId" />
+                <ScalarProperty Name="YemekAd" ColumnName="YemekAd" />
+                <ScalarProperty Name="SiparisId" ColumnName="SiparisId" />
+                <ScalarProperty Name="MasaId" ColumnName="MasaId" />
+                <ScalarProperty Name="YemekId" ColumnName="YemekId" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="RMSModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="RMSModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="RMSModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="RMSModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="RMSModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RMSModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="RMSModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RMSModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="RMSModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="RMSModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Katalog_Ozellik">
+            <EntityTypeMapping TypeName="RMSModel.Katalog_Ozellik">
+              <MappingFragment StoreEntitySet="Katalog_Ozellik">
+                <ScalarProperty Name="OzellikId" ColumnName="OzellikId" />
+                <ScalarProperty Name="KatalogId" ColumnName="KatalogId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YemekKatalog">
+            <EntityTypeMapping TypeName="RMSModel.YemekKatalog">
+              <MappingFragment StoreEntitySet="YemekKatalog">
+                <ScalarProperty Name="CokluSecim" ColumnName="CokluSecim" />
+                <ScalarProperty Name="KatalogAd" ColumnName="KatalogAd" />
+                <ScalarProperty Name="KatalogId" ColumnName="KatalogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YemekOzellik">
+            <EntityTypeMapping TypeName="RMSModel.YemekOzellik">
+              <MappingFragment StoreEntitySet="YemekOzellik">
+                <ScalarProperty Name="Yemek_Ozellik" ColumnName="Yemek_Ozellik" />
+                <ScalarProperty Name="OzellikId" ColumnName="OzellikId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Menu">
+            <EntityTypeMapping TypeName="RMSModel.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="KatalogIdler" ColumnName="KatalogIdler" />
+                <ScalarProperty Name="YemekKategori" ColumnName="YemekKategori" />
+                <ScalarProperty Name="YemekResim" ColumnName="YemekResim" />
+                <ScalarProperty Name="YemekFiyat" ColumnName="YemekFiyat" />
+                <ScalarProperty Name="YemekAd" ColumnName="YemekAd" />
+                <ScalarProperty Name="YemekId" ColumnName="YemekId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

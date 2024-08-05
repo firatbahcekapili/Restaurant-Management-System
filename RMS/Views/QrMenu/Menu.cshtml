@@ -1,0 +1,94 @@
+﻿@model List<RMS.Models.Menu>
+
+@{
+    Layout = null;
+}
+<link href="~/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+<script src="https://kit.fontawesome.com/00c5ff292c.js" crossorigin="anonymous"></script>
+<!-- Custom styles for this template-->
+<link href="~/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.min.css" rel="stylesheet" />
+<!-- Bootstraps icons-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<!-- Bootstrap core JavaScript-->
+<script src="~/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="~/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<!-- Core plugin JavaScript-->
+
+<script src="~/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Menu</title>
+    <link href="~/Content/PagesContent/QrMenu/Menu/qrmenu.css" rel="stylesheet" />
+
+
+</head>
+<body>
+
+
+
+    <section id="our_menu" class="pt-5 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page_title text-center mb-4">
+                        <h1>Menü</h1>
+                        <div class="single_line"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs menu_tab mb-4" id="MenuTab" role="tablist">
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var kategori in Model.Where(x => x.Durum == true).Select(x => x.YemekKategori).Distinct().ToList())
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(i== 1 ? "active":"")" id="@kategori.Replace(" ","")-tab" data-toggle="tab" href="#@kategori.Replace(" ","")" role="tab">@kategori</a>
+                        </li>
+                        i++;
+                    }
+                </ul>
+            </div>
+            <div class="row">
+                <div class="tab-content col-12" id="MenuTabContent">
+                    @{
+                        int k = 1;
+                    }
+                    @foreach (var kategori in Model.Where(x => x.Durum == true).Select(x => x.YemekKategori).Distinct().ToList())
+                    {
+
+                        <div class="tab-pane fade @(k== 1 ? "show active":"") " id="@kategori.Replace(" ","")" role="tabpanel" aria-labelledby="@kategori.Replace(" ","")-tab">
+                            <div class="row">
+                                @foreach (var item in Model.Where(x => x.YemekKategori == kategori && x.Durum == true))
+                                {
+                                    <div class="col-lg-6 col-12">
+                                        <div class="single_menu">
+                                            <img src="@(item.YemekResim !=null?item.YemekResim :"/content/YemekResimler/food-img-empty/not-found.jpg")" alt="@item.YemekAd">
+                                            <div class="menu_content">
+                                                <h4>@item.YemekAd  <span>@item.YemekFiyat &#8378;</span></h4>
+                                                <p style="height:50px;"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+                        k++;
+                    }
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

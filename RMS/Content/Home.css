@@ -1,0 +1,19 @@
+﻿
+/* Geniş ekran için stiller */
+@media screen and (min-width: 768px) {
+
+    .konumSecimi{
+        width:200px;
+    } 
+ 
+}
+
+@media screen and (max-width: 533px) {
+
+
+
+}
+.konumSecimi {
+    width: 200px;
+} 
+ 

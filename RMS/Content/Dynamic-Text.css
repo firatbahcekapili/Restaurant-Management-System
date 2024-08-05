@@ -1,0 +1,12 @@
+﻿.dynamic-text {
+    font-size: 17px; /* Başlangıç font boyutu */
+    transition: all 0.5s ease-in-out; /* Boyut değişikliklerini yumuşatmak için geçiş efekti */
+}
+
+@media (max-width: 768px) {
+    .dynamic-text {
+        font-size: 15px; /* Ekran genişliği 768px veya daha küçükse font boyutunu küçült */
+    }
+}
+
+

@@ -1,0 +1,196 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <script type="text/javascript" src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    @*<script src="~/Scripts/jquery-3.6.4.min.js"></script>*@
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/00c5ff292c.js" crossorigin="anonymous"></script>
+    <script>
+$(document).ready(function() {
+    $("#Cikiş").click(function() {
+        $.ajax({
+            url: '@Url.Action("Logout", "Home")', // Controller ve metodunuzu belirtin
+            type: 'GET', // veya 'POST' olarak değiştirebilirsiniz
+            dataType: 'json',
+            success: function(result) {
+                // Controller metodunun dönüş değerini alın
+                $("#result").html(result); // Sonucu result elementine yerleştirin
+            },
+            error: function() {
+                $("#result").html("Bir hata oluştu");
+            }
+        });
+    });
+});
+    </script>
+
+
+
+
+
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #eee
+        }
+
+        .snav-link {
+            border-radius: 0px !important;
+            transition: all 0.5s;
+            width: 100px;
+            display: flex;
+            flex-direction: column
+        }
+
+            .snav-link small {
+                font-size: 12px
+            }
+
+            .snav-link:hover {
+                background-color: #52525240 !important
+            }
+
+            .snav-link .fa {
+                transition: all 1s;
+                font-size: 20px
+            }
+
+            .snav-link:hover .fa {
+                transform: rotate(360deg)
+            }
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body style="height:100%;margin:0px;">
+    <header>
+        <div class="row">
+
+
+
+
+
+
+            @*<div class="col-md-1  " >
+
+                    <div class="d-flex flex-column flex-shrink-0 bg-light vh-100 " style="width: 100px;">
+                        <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+                            <li class="nav-item"> <a href="#" class="nav-link active py-3 border-bottom"> <i class="fa fa-home"></i> <small>Home</small> </a> </li>
+                            <li> <a href="#" class="nav-link snav-link py-3 border-bottom"> <i class="fa fa-dashboard"></i> <small>Dashboard</small> </a> </li>
+                            <li> <a href="#" class="nav-link snav-link py-3 border-bottom"> <i class="fa fa-first-order"></i> <small>My Orders</small> </a> </li>
+                            <li> <a href="#" class="nav-link snav-link py-3 border-bottom"> <i class="fa fa-cog"></i> <small>Settings</small> </a> </li>
+                            <li> <a href="#" class="nav-link snav-link py-3 border-bottom"> <i class="fa fa-bookmark"></i> <small>Bookmark</small> </a> </li>
+                        </ul>
+                        <div class="dropdown border-top">
+                            <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false"> <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle"> </a>
+                            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-9">*@
+
+
+            <nav class="navbar navbar-expand-lg bg-body-tertiary  sticky-top  shadow  ">
+                <div class="container-fluid container  ">
+                    <a class="navbar-brand" href="#">RMS</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse " id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item"> <a class="nav-link @ViewBag.active" aria-current="page" href="#">Anasayfa</a>  </li>
+
+                        </ul>
+                        <ul class=" navbar-nav ms-auto">
+
+
+                            <li class="nav-item dropdown">
+
+
+
+                                <a class="nav-link dropdown-toggle " data-bs-toggle="dropdown"><i class="bi bi-person"></i> @Html.Action("GetirPartial")  </a>
+
+                                <div>
+
+                                    <ul class="dropdown-menu">
+                                        <li>  @Html.ActionLink("Giriş Yap", "Giris", "Giris", null, new { @class = "dropdown-item" }) </li>
+                                        <li>  @Html.ActionLink("Çıkış Yap", "Logout", "Giris", null, new { @class = "dropdown-item" }) </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
+
+
+
+                    </div>
+                </div>
+            </nav>
+
+
+
+            @RenderBody()
+
+        </div>
+
+
+
+
+
+    </header>
+
+
+
+    <div class="">
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+</body>
+</html>
