@@ -402,518 +402,519 @@
 
 
 
-var removedElements = document.querySelectorAll("#MasaTasi .modallink");
+    var removedElements = document.querySelectorAll("#MasaTasi .modallink");
 
-function BiFiltre() {
-    var masalar = document.querySelectorAll("#MasaBirlestir .modallink");
+    function BiFiltre() {
+        var masalar = document.querySelectorAll("#MasaBirlestir .modallink");
 
-    var removedElements = Array.from(masalar);
+        var removedElements = Array.from(masalar);
 
-    for (var i = 0; i < masalar.length; i++) {
-        if (masalar[i].parentElement.id == 'MasaBirlestir') {
-            if (!(masalar[i].classList.contains("dolu"))) {
-                // Eğer disabled sınıfı içermiyorsa, elementi kaldır
-                removedElements.push(masalar[i]);
-                masalar[i].remove();
-            } else {
-                if (masalar[i].getAttribute("masaid") == @Model.Masalar[0].MasaId) {
-                    // Eğer masa ID'si uyuyorsa, elementi kaldır
+        for (var i = 0; i < masalar.length; i++) {
+            if (masalar[i].parentElement.id == 'MasaBirlestir') {
+                if (!(masalar[i].classList.contains("dolu"))) {
+                    // Eğer disabled sınıfı içermiyorsa, elementi kaldır
                     removedElements.push(masalar[i]);
                     masalar[i].remove();
-                }
+                } else {
+                    if (masalar[i].getAttribute("masaid") == @Model.Masalar[0].MasaId) {
+                        // Eğer masa ID'si uyuyorsa, elementi kaldır
+                        removedElements.push(masalar[i]);
+                        masalar[i].remove();
+                    }
 
-                // Elementin üzerindeki sınıfları temizle
-                masalar[i].classList.remove("disabled", "bg-danger");
+                    // Elementin üzerindeki sınıfları temizle
+                    masalar[i].classList.remove("disabled", "bg-danger");
+                }
             }
         }
+
+
+        document.getElementById('modal-birlestir').showModal();
     }
 
 
-    document.getElementById('modal-birlestir').showModal();
-}
 
 
 
 
+    function Tikla(element, id) {
 
+        var parentDiv = element.parentElement;
+        var parentId = parentDiv.id;
 
-function Tikla(element, id) {
+        if (parentId == 'MasaTasi') {
 
-    var parentDiv = element.parentElement;
-    var parentId = parentDiv.id;
-
-    if (parentId == 'MasaTasi') {
-
-        MasaTasi(id);
-    } else {
-        MasaBirlestir(id);
-
-    }
-
-
-}
-
-
-function MasaBirlestir(id) {
-
-
-
-    $.ajax({
-        url: '/Home/MasaBirlestir',
-        type: 'POST',
-        data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
-        success: function (result) {
-
-            window.location.href = '/Home/Masa/' + id;
-
-        },
-        error: function () {
-
-        }
-    });
-
-
-}
-
-function MasaTasi(id) {
-
-
-
-    $.ajax({
-        url: '/Home/MasaTasi',
-        type: 'POST',
-        data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
-        success: function (result) {
-
-            window.location.href = '/Home/Masa/' + id;
-
-        },
-        error: function () {
-
-        }
-    });
-
-
-}
-
-$(document).ready(function () {
-    $.get('@Url.Action("AdisyonGetir", "Home")', { masaId: @Model.Masalar[0].MasaId }, function (data) {
-        $('#partialContainer').html(data);
-    });
-    document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
-});
-
-// Tüm hovered-element ve target-elementleri seçin
-const hoveredElements = document.querySelectorAll('.card-row');
-const targetElements = document.querySelectorAll('.imgr');
-
-// Her hovered-element için işlemi tanımlayın
-hoveredElements.forEach((hoveredElement, index) => {
-    hoveredElement.addEventListener('mouseenter', () => {
-        // Hover yapıldığında aynı indeksteki target-elementin grayscale efektini değiştirin
-        targetElements[index].style.transform = 'scale(1.2)';
-        targetElements[index].style.filter = 'grayscale(0%)';
-    });
-
-    hoveredElement.addEventListener('mouseleave', () => {
-        // Fare imleci hoverdan çıkınca aynı indeksteki target-elementin grayscale efektini eski haline getirin
-        targetElements[index].style.transform = 'scale(1)';
-        targetElements[index].style.filter = 'grayscale(100%)';
-    });
-});
-
-var elements = document.querySelectorAll(".selectable");
-elements.forEach(function (element) {
-    element.addEventListener("click", function (event) {
-        if (!element.classList.contains("selected")) {
-            element.classList.add("selected");
-            elements.forEach(function (a) {
-                if (a != element) {
-                    a.classList.remove("selected");
-                    var collapseElements = document.querySelectorAll(".collapse.show");
-                    collapseElements.forEach(function (collapse) {
-                        // Collapse öğesine tıklanmadıysa kapat
-                        if (!collapse.contains(event.target.closest(".delete.icon"))) {
-                            collapse.classList.remove("show");
-                            var yemekad = element.getAttribute("data-yemekad").replace(" ", "");
-                            var adetInput = document.getElementById("adet-Input" + yemekad);
-                            adetInput.value = "";
-                        }
-                    });
-                }
-            });
+            MasaTasi(id);
         } else {
-            element.classList.remove("selected");
+            MasaBirlestir(id);
+
         }
-    });
-});
 
-document.addEventListener("click", function (event) {
-    if (!event.target.closest(".selectable")) {
-        var collapseElements = document.querySelectorAll(".collapse.show");
-        collapseElements.forEach(function (collapse) {
-            if (!collapse.contains(event.target) && !event.target.closest(".delete.icon")) {
-                elements.forEach(function (item) {
-                    item.classList.remove("selected");
-                    collapse.classList.remove("show");
-                    var selectable = document.querySelectorAll(".selectable");
-                    selectable.forEach(function (sElement) {
-                        var yemekad = sElement.getAttribute("data-yemekad").replace(" ", "");
-                        var adetInput = document.getElementById("adet-Input" + yemekad);
-                        adetInput.value = "";
-                    });
-                });
-            }
-        });
-    }
-});
-
-
-
-
-
-var selectedItemsValue = [];
-function alAdetDegeri(yemekAd) {
-    var inputElement = document.getElementById("adetInput" + yemekAd);
-
-    var adetDegeri = inputElement.value;
-
-    console.log("Yemek Adı: " + yemekAd + ", Adet Değeri: " + adetDegeri);
-}
-
-
-
-//--------------------------------------------------------
-
-
-var ilkDegerler = [];
-document.addEventListener("DOMContentLoaded", function () {
-
-
-    var toplam = document.getElementById("toplam").getAttribute("adet");
-    for (var i = 0; i < toplam; i++) {
-
-        ilkDegerler[i] = document.querySelector(".adisyon-adet-" + i + 1).value;
 
     }
 
-});
 
-
-
-//--------------------------------------------------------
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    var gonderButton = document.getElementById("gonder");
-    gonderButton.addEventListener("click", function () {
-
-        var yemekAdlari = [];
-        var yemekAdeti = [];
-        selectedItems.forEach(function (item) {
-            yemekAdlari.push(item.getAttribute("data-yemekad"));
-        });
-
-
-        for (var i = 0; i < yemekAdlari.length; i++) {
-            yemekadi = yemekAdlari[i];
-
-            alAdetDegeri(yemekadi.replace(" ", ""))
-            var inputElement = document.getElementById("adetInput" + yemekadi.replace(" ", ""));
-
-
-            var adetDegeri = inputElement.value;
-            yemekAdeti.push(adetDegeri);
-        }
-
-
-        /*//----------------------------------------------------//*/
-
-
-        var adisyonYemekAd = [];
-        var adisyonYemekAdet = [];
-        var toplam = document.getElementById("toplam").getAttribute("adet");
-
-
-        for (var c = 1; c <= parseInt(toplam); c++) {
-            var adisyonElement = document.getElementById(c);
-            var yemekAd = adisyonElement.getAttribute("yemekad");
-            var adisyonAdet = document.querySelector(".adisyon-adet-" + c).value;
-            adisyonYemekAd.push(yemekAd);
-            adisyonYemekAdet.push(adisyonAdet);
-
-            console.log(yemekAd + " " + adisyonAdet);
-        }
-
-        for (var i = 0; i < adisyonYemekAd.length; i++) {
-
-
-            if (yemekAdlari.find(x => x == adisyonYemekAd[i]) != undefined) {
-
-
-                if (adisyonYemekAdet[i] > yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] + ilkDegerler[i]) {
-
-                    //yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] = 0;
-                }
-
-            }
-
-
-        }
-
-
-
+    function MasaBirlestir(id) {
 
 
 
         $.ajax({
-            url: "/Home/AdisyonGuncelle",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=UTF-8",
-            cache: false, 
-            data: JSON.stringify({ Veri: adisyonYemekAd, adet: adisyonYemekAdet, id: @Model.Masalar[0].MasaId }),
+            url: '/Home/MasaBirlestir',
+            type: 'POST',
+            data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
             success: function (result) {
-                if (result.success) {
-                    var s_AdisyonPartia = result.AdisyonPartial;
 
-                } else {
-                    console.error("Adisyon güncelleme başarısız oldu.");
-                }
+                window.location.href = '/Home/Masa/' + id;
+
             },
-            error: function (xhr, status, error) {
-                console.error("AJAX isteği başarısız oldu. Durum kodu: " + xhr.status);
+            error: function () {
+
             }
         });
 
 
-        /*//----------------------------------------------------//*/
+    }
+
+    function MasaTasi(id) {
 
 
 
+        $.ajax({
+            url: '/Home/MasaTasi',
+            type: 'POST',
+            data: { Masaid: @Model.Masalar[0].MasaId, Yeniid: id },
+            success: function (result) {
 
+                window.location.href = '/Home/Masa/' + id;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/Home/Adisyon", true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-
-
-
-
-
-        var data = JSON.stringify({ Veri: yemekAdlari, adet: yemekAdeti, id: @Model.Masalar[0].MasaId });
-
-        xhr.send(data);
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = xhr.responseText;
-                document.getElementById("partialContainer").innerHTML = response;
-
-
-
-                //gönder butonuna basıldıktan sonra seçili elementlerin sıfırlanma işlemi
-
-                var selectableElements = document.querySelectorAll(".selectable");
-                var collapseElements = document.querySelectorAll(".collapse");
-                var adetElements = document.querySelectorAll(".adet");
-
-                selectableElements.forEach(function (element) {
-                    element.classList.remove("selected");
-
-
-                });
-                adetElements.forEach(function (element) {
-                    element.value = 0;
-
-
-                });
-                collapseElements.forEach(function (element) {
-                    element.classList.remove("show");
-
-
-                });
-
-                selectedItems = [];
-
-                for (var i = 0; i < yemekAdeti.length; i++) {
-                    ilkDegerler[i] = yemekAdeti[i];
-                }
-
-
+            },
+            error: function () {
 
             }
-        };
+        });
+
+
+    }
+
+    $(document).ready(function () {
+        $.get('@Url.Action("AdisyonGetir", "Home")', { masaId: @Model.Masalar[0].MasaId }, function (data) {
+            $('#partialContainer').html(data);
+        });
+        document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
     });
-});
 
+    // Tüm hovered-element ve target-elementleri seçin
+    const hoveredElements = document.querySelectorAll('.card-row');
+    const targetElements = document.querySelectorAll('.imgr');
 
+    // Her hovered-element için işlemi tanımlayın
+    hoveredElements.forEach((hoveredElement, index) => {
+        hoveredElement.addEventListener('mouseenter', () => {
+            // Hover yapıldığında aynı indeksteki target-elementin grayscale efektini değiştirin
+            targetElements[index].style.transform = 'scale(1.2)';
+            targetElements[index].style.filter = 'grayscale(0%)';
+        });
 
-
-function up(sira) {
-
-
-    var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
-    var deger = parseInt(document.querySelector(".adisyon-adet-" + sira).value);
-    var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
-    deger++;
-
-    var ozellikler = [];
-    $('#collapse-' + sira + ' span').each(function () {
-        ozellikler.push($(this).text());
+        hoveredElement.addEventListener('mouseleave', () => {
+            // Fare imleci hoverdan çıkınca aynı indeksteki target-elementin grayscale efektini eski haline getirin
+            targetElements[index].style.transform = 'scale(1)';
+            targetElements[index].style.filter = 'grayscale(100%)';
+        });
     });
-    console.log(ozellikler);
 
+    var elements = document.querySelectorAll(".selectable");
+    elements.forEach(function (element) {
+        element.addEventListener("click", function (event) {
+            if (!element.classList.contains("selected")) {
+                element.classList.add("selected");
+                elements.forEach(function (a) {
+                    if (a != element) {
+                        a.classList.remove("selected");
+                        var collapseElements = document.querySelectorAll(".collapse.show");
+                        collapseElements.forEach(function (collapse) {
+                            // Collapse öğesine tıklanmadıysa kapat
+                            if (!collapse.contains(event.target.closest(".delete.icon"))) {
+                                collapse.classList.remove("show");
+                                var yemekad = element.getAttribute("data-yemekad").replace(" ", "");
+                                var adetInput = document.getElementById("adet-Input" + yemekad);
+                                adetInput.value = "";
+                            }
+                        });
+                    }
+                });
+            } else {
+                element.classList.remove("selected");
+            }
+        });
+    });
 
-    console.log('Arttırma');
-    console.log('güncel değer:' + deger);
-    console.log('eski değer:' + eskideger);
-    $.ajax({
-        url: '/Home/Adisyon',
-        data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
-        type: 'POST',
-        success: function (result) {
-
-            document.getElementById("partialContainer").innerHTML = result;
-            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
-        },
-        error: function (error) {
-            console.error(error);
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".selectable")) {
+            var collapseElements = document.querySelectorAll(".collapse.show");
+            collapseElements.forEach(function (collapse) {
+                if (!collapse.contains(event.target) && !event.target.closest(".delete.icon")) {
+                    elements.forEach(function (item) {
+                        item.classList.remove("selected");
+                        collapse.classList.remove("show");
+                        var selectable = document.querySelectorAll(".selectable");
+                        selectable.forEach(function (sElement) {
+                            var yemekad = sElement.getAttribute("data-yemekad").replace(" ", "");
+                            var adetInput = document.getElementById("adet-Input" + yemekad);
+                            adetInput.value = "";
+                        });
+                    });
+                }
+            });
         }
     });
 
 
 
-}
 
 
-function down(sira) {
+    var selectedItemsValue = [];
+    function alAdetDegeri(yemekAd) {
+        var inputElement = document.getElementById("adetInput" + yemekAd);
 
+        var adetDegeri = inputElement.value;
 
-    var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
-    var inputElement = document.querySelector(".adisyon-adet-" + sira);
-    var deger = parseInt(inputElement.value);
-    var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
-    var ozellikler = [];
-    $('#collapse-' + sira + ' span').each(function () {
-        ozellikler.push($(this).text());
-    });
-    console.log(ozellikler);
-
-    deger--;
-    inputElement.value = deger;
-
-    console.log('Azaltma');
-    console.log('güncel değer:' + deger);
-    console.log('eski değer:' + eskideger);
-    $.ajax({
-        url: '/Home/Adisyon',
-        data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
-        type: 'POST',
-        success: function (result) {
-
-            document.getElementById("partialContainer").innerHTML = result;
-            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
-        },
-        error: function (error) {
-            console.error(error);
-        }
-    });
-
-
-
-}
-
-
-function MenuUp(yemekid, yemekad) {
-
-
-
-
-
-    var deger = parseInt(document.querySelector("#adet-Input-" + yemekid).value);
-
-    if (!isNaN(deger) && deger >= 1) {
-
-    } else {
-        deger = 1;
+        console.log("Yemek Adı: " + yemekAd + ", Adet Değeri: " + adetDegeri);
     }
 
 
 
-
-    console.log('Arttırma');
-    console.log('güncel değer:' + deger
-
-    var selects = document.querySelectorAll(".select-" + yemekid);
-
-    var selectedValues = {};
-
-    selects.forEach(function (selectBox) {
-        /*            var selectLabel = selectBox.labels[0].textContent.trim();*/
-        var selectelement = selectBox.querySelector("select");
-        var selectLabel = selectelement.getAttribute("katalogad");
+//--------------------------------------------------------
 
 
+    var ilkDegerler = [];
+    document.addEventListener("DOMContentLoaded", function () {
 
-        var selectedOptions = [];
-        var options = selectelement && selectelement.options;
-        if (options) {
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].selected) {
-                    selectedOptions.push(options[i].value);
-                }
-            }
+
+        var toplam = document.getElementById("toplam").getAttribute("adet");
+        for (var i = 0; i < toplam; i++) {
+
+            ilkDegerler[i] = document.querySelector(".adisyon-adet-" + i + 1).value;
+
         }
-        if (selectedOptions.length > 0) {
-            selectedValues[selectLabel] = selectedOptions;
-        }
+
     });
 
 
 
-    var jsonData = JSON.stringify(selectedValues);
-
-    console.log(jsonData);
-
-    $.ajax({
-        url: '/Home/Adisyon',
-        data: { YemekId: yemekid, adet: deger, id: @Model.Masalar[0].MasaId, YemekOzellikJson: jsonData, Ozellikler: null },
-        type: 'POST',
-        success: function (result) {
-
-            document.getElementById("partialContainer").innerHTML = result;
-            document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
-
-            var adetInput = document.getElementById("adet-Input" + yemekad);
-            /* adetInput.value = "";*/
+//--------------------------------------------------------
 
 
-            var select = document.querySelectorAll(".select-" + ymek);
 
-            select.forEach(function (s) {
+    document.addEventListener("DOMContentLoaded", function () {
+        var gonderButton = document.getElementById("gonder");
+        gonderButton.addEventListener("click", function () {
 
-                var a = s.querySelectorAll("a i");
-
-                a.forEach(function (aElement) {
-                    console.log(aElement);
-                    aElement.click();
-                });
-
+            var yemekAdlari = [];
+            var yemekAdeti = [];
+            selectedItems.forEach(function (item) {
+                yemekAdlari.push(item.getAttribute("data-yemekad"));
             });
 
 
-        },
-        error: function (error) {
-            console.error(error);
-        }
+            for (var i = 0; i < yemekAdlari.length; i++) {
+                yemekadi = yemekAdlari[i];
+
+                alAdetDegeri(yemekadi.replace(" ", ""))
+                var inputElement = document.getElementById("adetInput" + yemekadi.replace(" ", ""));
+
+
+                var adetDegeri = inputElement.value;
+                yemekAdeti.push(adetDegeri);
+            }
+
+
+            /*//----------------------------------------------------//*/
+
+
+            var adisyonYemekAd = [];
+            var adisyonYemekAdet = [];
+            var toplam = document.getElementById("toplam").getAttribute("adet");
+
+
+            for (var c = 1; c <= parseInt(toplam); c++) {
+                var adisyonElement = document.getElementById(c);
+                var yemekAd = adisyonElement.getAttribute("yemekad");
+                var adisyonAdet = document.querySelector(".adisyon-adet-" + c).value;
+                adisyonYemekAd.push(yemekAd);
+                adisyonYemekAdet.push(adisyonAdet);
+
+                console.log(yemekAd + " " + adisyonAdet);
+            }
+
+            for (var i = 0; i < adisyonYemekAd.length; i++) {
+
+
+                if (yemekAdlari.find(x => x == adisyonYemekAd[i]) != undefined) {
+
+
+                    if (adisyonYemekAdet[i] > yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] + ilkDegerler[i]) {
+
+                        //yemekAdeti[yemekAdlari.indexOf(adisyonYemekAd[i])] = 0;
+                    }
+
+                }
+
+
+            }
+
+
+
+
+
+
+            $.ajax({
+                url: "/Home/AdisyonGuncelle",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                cache: false, 
+                data: JSON.stringify({ Veri: adisyonYemekAd, adet: adisyonYemekAdet, id: @Model.Masalar[0].MasaId }),
+                success: function (result) {
+                    if (result.success) {
+                        var s_AdisyonPartia = result.AdisyonPartial;
+
+                    } else {
+                        console.error("Adisyon güncelleme başarısız oldu.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX isteği başarısız oldu. Durum kodu: " + xhr.status);
+                }
+            });
+
+
+            /*//----------------------------------------------------//*/
+
+
+
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/Home/Adisyon", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+
+
+
+
+
+            var data = JSON.stringify({ Veri: yemekAdlari, adet: yemekAdeti, id: @Model.Masalar[0].MasaId });
+
+            xhr.send(data);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = xhr.responseText;
+                    document.getElementById("partialContainer").innerHTML = response;
+
+
+
+                    //gönder butonuna basıldıktan sonra seçili elementlerin sıfırlanma işlemi
+
+                    var selectableElements = document.querySelectorAll(".selectable");
+                    var collapseElements = document.querySelectorAll(".collapse");
+                    var adetElements = document.querySelectorAll(".adet");
+
+                    selectableElements.forEach(function (element) {
+                        element.classList.remove("selected");
+
+
+                    });
+                    adetElements.forEach(function (element) {
+                        element.value = 0;
+
+
+                    });
+                    collapseElements.forEach(function (element) {
+                        element.classList.remove("show");
+
+
+                    });
+
+                    selectedItems = [];
+
+                    for (var i = 0; i < yemekAdeti.length; i++) {
+                        ilkDegerler[i] = yemekAdeti[i];
+                    }
+
+
+
+                }
+            };
+        });
     });
 
 
-}
-function MenuDown(id, yemekad) {
+
+
+    function up(sira) {
+
+
+        var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
+        var deger = parseInt(document.querySelector(".adisyon-adet-" + sira).value);
+        var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
+        deger++;
+
+        var ozellikler = [];
+        $('#collapse-' + sira + ' span').each(function () {
+            ozellikler.push($(this).text());
+        });
+        console.log(ozellikler);
+
+
+        console.log('Arttırma');
+        console.log('güncel değer:' + deger);
+        console.log('eski değer:' + eskideger);
+        $.ajax({
+            url: '/Home/Adisyon',
+            data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
+            type: 'POST',
+            success: function (result) {
+
+                document.getElementById("partialContainer").innerHTML = result;
+                document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+
+
+    }
+
+
+    function down(sira) {
+
+
+        var yemekid = document.getElementById("adisyon-adet-" + sira).getAttribute("yemekid");
+        var inputElement = document.querySelector(".adisyon-adet-" + sira);
+        var deger = parseInt(inputElement.value);
+        var eskideger = parseInt(document.querySelector(".adisyon-adet-" + sira).getAttribute("sayi"))
+        var ozellikler = [];
+        $('#collapse-' + sira + ' span').each(function () {
+            ozellikler.push($(this).text());
+        });
+        console.log(ozellikler);
+
+        deger--;
+        inputElement.value = deger;
+
+        console.log('Azaltma');
+        console.log('güncel değer:' + deger);
+        console.log('eski değer:' + eskideger);
+        $.ajax({
+            url: '/Home/Adisyon',
+            data: { Yemekid: yemekid, adet: deger - eskideger, id: @Model.Masalar[0].MasaId, Ozellikler: ozellikler },
+            type: 'POST',
+            success: function (result) {
+
+                document.getElementById("partialContainer").innerHTML = result;
+                document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+
+
+    }
+
+
+    function MenuUp(yemekid, yemekad) {
+
+
+
+
+
+        var deger = parseInt(document.querySelector("#adet-Input-" + yemekid).value);
+
+        if (!isNaN(deger) && deger >= 1)
+        {
+
+        } else {
+            deger = 1;
+        }
+
+
+
+
+        console.log('Arttırma');
+        console.log('güncel değer:' + deger);
+
+        var selects = document.querySelectorAll(".select-" + yemekid);
+
+        var selectedValues = {};
+
+        selects.forEach(function (selectBox) {
+            /*            var selectLabel = selectBox.labels[0].textContent.trim();*/
+            var selectelement = selectBox.querySelector("select");
+            var selectLabel = selectelement.getAttribute("katalogad");
+
+
+
+            var selectedOptions = [];
+            var options = selectelement && selectelement.options;
+            if (options) {
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].selected) {
+                        selectedOptions.push(options[i].value);
+                    }
+                }
+            }
+            if (selectedOptions.length > 0) {
+                selectedValues[selectLabel] = selectedOptions;
+            }
+        });
+
+
+
+        var jsonData = JSON.stringify(selectedValues);
+
+        console.log(jsonData);
+
+        $.ajax({
+            url: '/Home/Adisyon',
+            data: { YemekId: yemekid, adet: deger, id: @Model.Masalar[0].MasaId, YemekOzellikJson: jsonData, Ozellikler: null },
+            type: 'POST',
+            success: function (result) {
+
+                document.getElementById("partialContainer").innerHTML = result;
+                document.getElementById("ToplamFiyat").innerHTML = document.getElementById("fiyatToplam").getAttribute("toplam") + "₺";
+
+                var adetInput = document.getElementById("adet-Input" + yemekad);
+                /* adetInput.value = "";*/
+
+
+                var select = document.querySelectorAll(".select-" + ymek);
+
+                select.forEach(function (s) {
+
+                    var a = s.querySelectorAll("a i");
+
+                    a.forEach(function (aElement) {
+                        console.log(aElement);
+                        aElement.click();
+                    });
+
+                });
+
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+    }
+
+    function MenuDown(id, yemekad) {
 
     var deger = parseInt(document.querySelector("#adetInput" + yemekad.replace(" ", "")).value);
 
